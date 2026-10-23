@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عنايتي — عناية طبيعية لبشرتك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              deep: '#0F3D33',     // الأعمق
+              dark: '#186655',     // الداكن
+              DEFAULT: '#218A73',  // الأساسي
+              accent: '#2CB899',   // الساطع / حيوي
+              light: '#C5E0C9',    // الفاتح
+              muted: '#A2B8A5',    // الهادئ / رمادي مخضر
+              surface: '#F4F9F5',  // أرضية ناعمة
+            },
+            forest: {
+              deep: '#0F3D33',
+              DEFAULT: '#186655',
+              light: '#218A73'
+            },
+            ivory: '#F4F9F5',
+            sand: '#C5E0C9',
+            sage: {
+              DEFAULT: '#218A73',
+              dark: '#186655',
+              light: '#2CB899'
+            },
+            accent: '#2CB899',
+            ink: '#0F3D33',
+          },
+          fontFamily: {
+            display: ['"Aref Ruqaa"', 'serif'],
+            body: ['Tajawal', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #d3e2d6;
+      color: #0F3D33;
+    }
+
+    .font-display {
+      font-family: 'Aref Ruqaa', serif;
+    }
+
+    /* organic leaf underline for section titles */
+    .leaf-underline {
+      position: relative;
+      display: inline-block;
+    }
+
+    .leaf-underline::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: -10px;
+      height: 10px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='10' viewBox='0 0 120 10'%3E%3Cpath d='M2 6 C 20 -2, 40 12, 60 5 S 100 -2, 118 6' stroke='%23218A73' stroke-width='2.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: repeat-x;
+      background-size: 90px 10px;
+      opacity: .9;
+    }
+
+    .blob {
+      border-radius: 62% 38% 55% 45% / 48% 45% 55% 52%;
+    }
+
+    .cart-drawer {
+      transition: transform .45s cubic-bezier(.65, 0, .35, 1);
+    }
+
+    .cart-drawer.closed {
+      transform: translateX(100%);
+    }
+
+    [dir="rtl"] .cart-drawer.closed {
+      transform: translateX(-100%);
+    }
+
+    .overlay {
+      transition: opacity .35s ease;
+    }
+
+    .toast {
+      transition: transform .4s cubic-bezier(.34, 1.56, .64, 1), opacity .4s ease;
+    }
+
+    .product-card {
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      border-color: #218A73;
+    }
+
+    .review-card {
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .review-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .tab-btn.active {
+      background: #218A73;
+      color: #FFFFFF;
+    }
+
+    .tab-btn {
+      transition: background .25s ease, color .25s ease;
+    }
+
+    ::selection {
+      background: #2CB899;
+      color: #0F3D33;
+    }
+
+    input:focus,
+    button:focus-visible,
+    a:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: 2px solid #218A73;
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="antialiased selection:bg-brand-accent selection:text-brand-deep">
+
+  <!-- ===================== Header ===================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-muted/20 shadow-sm">
+    <div class="max-w-7xl mx-auto px-5 md:px-10 flex items-center justify-between h-20">
+      <a href="#top" class="flex items-center gap-2.5">
+        <span class="font-display text-3xl md:text-4xl text-brand-deep">عنايتي</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-[15px] font-medium text-brand-deep/80">
+        <a href="#products" class="hover:text-brand transition">المنتجات</a>
+        <a href="#story" class="hover:text-brand transition">قصتنا</a>
+        <a href="#reviews" class="hover:text-brand transition">آراء العميلات</a>
+        <a href="#contact" class="hover:text-brand transition">تواصلي معنا</a>
+        <!-- Admin Login Button (Only entry to Admin) -->
+        <button onclick="openAdminLoginModal()"
+          class="flex items-center gap-1.5 text-xs font-bold bg-brand-light/40 hover:bg-brand hover:text-white text-brand-dark px-3.5 py-1.5 rounded-full transition border border-brand-muted/30">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>تسجيل الدخول</span>
+        </button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button id="searchToggle" aria-label="بحث"
+          class="p-2.5 rounded-full hover:bg-brand-light/40 text-brand-deep transition">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M21 21l-4.3-4.3" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <button id="cartToggle" aria-label="سلة المشتريات"
+          class="relative p-2.5 rounded-full bg-brand-light/30 hover:bg-brand-light/70 text-brand-deep transition">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <circle cx="10" cy="21" r="1.4" />
+            <circle cx="18" cy="21" r="1.4" />
+          </svg>
+          <span id="cartCount"
+            class="absolute -top-1 -left-1 bg-brand text-white text-[11px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-sm">0</span>
+        </button>
+
+        <button id="menuToggle" aria-label="القائمة"
+          class="md:hidden p-2 rounded-full hover:bg-brand-light/40 text-brand-deep transition">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- search bar -->
+    <div id="searchBar" class="hidden border-t border-brand-muted/20 bg-white">
+      <div class="max-w-7xl mx-auto px-5 md:px-10 py-3.5">
+        <input id="searchInput" type="text" placeholder="ابحثي عن سيروم، كريم، زيت، أو مقشر..."
+          class="w-full bg-transparent border-b border-brand-muted/30 py-2 text-base text-brand-deep focus:outline-none focus:border-brand placeholder:text-brand-muted">
+      </div>
+    </div>
+
+    <!-- mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-brand-muted/20 bg-white shadow-lg">
+      <div class="px-5 py-4 flex flex-col gap-3 text-brand-deep font-medium text-sm">
+        <a href="#products" class="py-1">المنتجات</a>
+        <a href="#story" class="py-1">قصتنا</a>
+        <a href="#reviews" class="py-1">آراء العميلات</a>
+        <a href="#contact" class="py-1">تواصلي معنا</a>
+        <button onclick="openAdminLoginModal()"
+          class="flex items-center gap-2 py-2.5 text-brand font-bold border-t border-brand-muted/20 mt-1 text-right w-full">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>تسجيل دخول لوحة التحكم</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== Hero Slider ===================== -->
+  <section id="top"
+    class="relative overflow-hidden bg-gradient-to-bl from-brand-deep via-brand-dark to-brand-deep text-white py-20 md:py-28 min-h-[580px] flex items-center">
+    <div class="max-w-7xl mx-auto px-5 md:px-10 w-full relative z-10">
+      <div id="heroSlider" class="relative"></div>
+      <div class="flex items-center justify-between mt-12 pt-6 border-t border-white/10">
+        <div id="sliderDots" class="flex items-center gap-2"></div>
+        <div class="flex items-center gap-3">
+          <button id="prevSlide" aria-label="السابق"
+            class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 text-white transition">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button id="nextSlide" aria-label="التالي"
+            class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 text-white transition">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Decorative Ambient Glow -->
+    <div class="absolute -top-20 -left-20 w-96 h-96 bg-brand-accent/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-brand/20 rounded-full blur-3xl pointer-events-none"></div>
+  </section>
+
+  <!-- ===================== Products ===================== -->
+  <section id="products" class="max-w-7xl mx-auto px-5 md:px-10 py-20">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+      <div>
+        <span class="text-xs font-bold text-brand uppercase tracking-wider block mb-1">مجموعتنا الطبيعية</span>
+        <h2 class="font-display text-4xl text-brand-deep leaf-underline">الأكثر طلبًا وتألقاً</h2>
+      </div>
+
+      <div id="filterTabs" class="flex flex-wrap gap-2">
+        <button data-filter="all"
+          class="tab-btn active px-5 py-2.5 rounded-full text-xs md:text-sm font-bold bg-white text-brand-deep border border-brand-muted/30 shadow-sm">الكل</button>
+        <button data-filter="بشرة"
+          class="tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-bold bg-white text-brand-deep border border-brand-muted/30 shadow-sm">بشرة</button>
+        <button data-filter="شعر"
+          class="tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-bold bg-white text-brand-deep border border-brand-muted/30 shadow-sm">شعر</button>
+        <button data-filter="جسم"
+          class="tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-bold bg-white text-brand-deep border border-brand-muted/30 shadow-sm">جسم</button>
+      </div>
+    </div>
+
+    <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-7"></div>
+  </section>
+
+  <!-- ===================== Story ===================== -->
+  <section id="story"
+    class="bg-gradient-to-b from-brand-light/30 via-brand-light/20 to-brand-surface py-24 border-y border-brand-muted/20">
+    <div class="max-w-3xl mx-auto px-5 md:px-10 text-center">
+      <h2 class="font-display text-4xl text-brand-deep mb-6 leading-relaxed">بدأت الفكرة من روتين بسيط في مطبخ أمي</h2>
+
+      <p class="text-brand-deep/80 text-base leading-loose mb-5 max-w-2xl mx-auto">
+        منذ خمس سنوات، كانت وصفات العناية الطبيعية جزءًا من حياتنا اليومية. حوّلنا تلك الوصفات إلى منتجات مدروسة، تُصنع
+        بكميات محدودة، وتُختبر مكوناتها قبل أن تصل إليكِ.
+      </p>
+      <p class="text-brand-deep/80 text-base leading-loose mb-12 max-w-2xl mx-auto">
+        لا نُضيف عطورًا صناعية ثقيلة ولا مكونات لا نستطيع تفسيرها. كل منتج يحمل نسبة المكونات الفعّالة على العبوة بوضوح
+        وشفافية مطلقة.
+      </p>
+
+      <!-- الأرقام والإحصائيات -->
+      <div class="grid grid-cols-3 gap-6 pt-8 border-t border-brand-muted/25 max-w-xl mx-auto">
+        <div class="p-3">
+          <p class="font-display text-3xl md:text-4xl text-brand font-bold">+30</p>
+          <p class="text-xs md:text-sm text-brand-muted font-bold mt-1">مكوّن طبيعي</p>
+        </div>
+        <div class="p-3 border-x border-brand-muted/20">
+          <p class="font-display text-3xl md:text-4xl text-brand font-bold">0%</p>
+          <p class="text-xs md:text-sm text-brand-muted font-bold mt-1">بارابين وسلفات</p>
+        </div>
+        <div class="p-3">
+          <p class="font-display text-3xl md:text-4xl text-brand font-bold">+40</p>
+          <p class="text-xs md:text-sm text-brand-muted font-bold mt-1">ألف عميلة سعيدة</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Reviews ===================== -->
+  <section id="reviews" class="max-w-7xl mx-auto px-5 md:px-10 py-24">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+      <div>
+        <span class="text-xs font-bold text-brand uppercase tracking-wider block mb-1">تجارب حقيقية</span>
+        <h2 class="font-display text-4xl text-brand-deep leaf-underline">بماذا تُخبرنا عميلاتنا</h2>
+      </div>
+      <button onclick="openReviewModal()"
+        class="self-start md:self-auto bg-brand-light/50 hover:bg-brand hover:text-white text-brand-dark px-5 py-2.5 rounded-full font-bold text-xs md:text-sm transition border border-brand-muted/30 flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        شاركينا تجربتك ورأيك
+      </button>
+    </div>
+    <div id="reviewsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+  </section>
+
+  <!-- ===================== Newsletter ===================== -->
+  <section class="bg-brand-deep text-white py-20 relative overflow-hidden">
+    <div class="max-w-3xl mx-auto px-5 text-center relative z-10">
+      <div
+        class="w-12 h-12 bg-brand/20 border border-brand-accent/30 rounded-2xl mx-auto flex items-center justify-center text-brand-accent mb-4">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+          <polyline points="22,6 12,13 2,6" />
+        </svg>
+      </div>
+      <h2 class="font-display text-3xl md:text-4xl mb-4">كوني أول من يعرف</h2>
+      <p class="text-brand-light/80 mb-8 max-w-md mx-auto text-sm md:text-base leading-relaxed">اشتركي لتصلكِ إصداراتنا
+        الجديدة، العروض الحصرية، ونصائح العناية قبل الجميع.</p>
+      <form id="newsletterForm" class="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+        <input type="email" required placeholder="بريدكِ الإلكتروني..."
+          class="px-5 py-3.5 rounded-full text-brand-deep bg-white w-full sm:flex-1 focus:outline-none focus:ring-2 focus:ring-brand-accent">
+        <button type="submit"
+          class="bg-brand hover:bg-brand-dark text-white px-8 py-3.5 rounded-full font-bold transition shadow-lg shadow-brand/30 flex-shrink-0">
+          اشتراك
+        </button>
+      </form>
+      <p id="newsletterMsg" class="mt-4 text-brand-accent text-sm hidden font-bold">تم اشتراكك بنجاح، أهلًا بكِ في عائلة
+        عنايتي 🌿</p>
+    </div>
+    <div class="absolute -bottom-16 -left-16 w-64 h-64 bg-brand-accent/10 rounded-full blur-2xl"></div>
+  </section>
+
+  <!-- ===================== Footer ===================== -->
+  <footer id="contact" class="bg-white pt-16 pb-10 border-t border-brand-muted/20">
+    <div class="max-w-7xl mx-auto px-5 md:px-10 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <p class="font-display text-3xl text-brand-deep">عنايتي</p>
+        </div>
+        <p class="text-brand-muted leading-relaxed text-sm">عناية طبيعية مصنوعة بحب ووعي، لبشرة صحية تستحق الأفضل
+          دائمًا.</p>
+      </div>
+
+      <div>
+        <p class="font-bold text-brand-deep mb-4 text-sm">تسوّقي حسب القسم</p>
+        <ul class="space-y-2.5 text-brand-muted text-sm font-medium">
+          <li><a href="#products" class="hover:text-brand transition">جميع المنتجات الطبيعية</a></li>
+          <li><a href="#products" class="hover:text-brand transition">عناية بالبشرة والوجه</a></li>
+          <li><a href="#products" class="hover:text-brand transition">عناية بالشعر التالف</a></li>
+          <li><a href="#products" class="hover:text-brand transition">عناية بالجسم والترطيب</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-bold text-brand-deep mb-4 text-sm">عن عنايتي</p>
+        <ul class="space-y-2.5 text-brand-muted text-sm font-medium">
+          <li><a href="#story" class="hover:text-brand transition">قصتنا</a></li>
+          <li><a href="#reviews" class="hover:text-brand transition">آراء العميلات</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-bold text-brand-deep mb-4 text-sm">تواصلي معنا</p>
+        <ul class="space-y-2.5 text-brand-muted text-sm font-medium">
+          <li class="flex items-center gap-2">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
+            <span>hello@anayati.example</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>الرياض، المملكة العربية السعودية</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="max-w-7xl mx-auto px-5 md:px-10 mt-12 pt-6 border-t border-brand-muted/15 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-muted gap-4">
+      <p>© 2026 عنايتي. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <!-- ===================== Cart Drawer ===================== -->
+  <div id="cartOverlay" class="overlay fixed inset-0 bg-brand-deep/50 backdrop-blur-sm z-40 hidden opacity-0"></div>
+  <aside id="cartDrawer"
+    class="cart-drawer closed fixed top-0 left-0 h-full w-full sm:w-[420px] bg-white z-50 flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-brand-muted/20">
+      <div class="flex items-center gap-2">
+        <h3 class="font-display text-2xl text-brand-deep">سلة المشتريات</h3>
+        <span class="w-2 h-2 rounded-full bg-brand"></span>
+      </div>
+      <button id="cartClose"
+        class="w-8 h-8 rounded-full bg-brand-surface flex items-center justify-center text-brand-deep hover:bg-brand-light transition"
+        aria-label="إغلاق السلة">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+
+    <div id="cartItems" class="flex-1 overflow-y-auto px-6 py-5 space-y-4"></div>
+
+    <div class="border-t border-brand-muted/20 px-6 py-6 bg-brand-surface">
+      <div class="flex justify-between mb-2 text-sm text-brand-muted">
+        <span>الشحن والتوصيل</span>
+        <span class="text-brand font-bold">مجاني عند الطلب بـ 200 ر.س فأكثر</span>
+      </div>
+      <div class="flex justify-between mb-5 text-lg font-bold text-brand-deep">
+        <span>الإجمالي النهائي</span>
+        <span id="cartTotal" class="text-brand text-xl">0 ر.س</span>
+      </div>
+      <button id="checkoutBtn" onclick="openCheckoutModal()"
+        class="w-full bg-brand hover:bg-brand-dark text-white py-3.5 rounded-full font-bold transition shadow-lg shadow-brand/30 flex items-center justify-center gap-2">
+        <span>إتمام الطلب وتأكيد الشحن</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ===================== Checkout Modal ===================== -->
+  <div id="checkoutModalOverlay"
+    class="overlay fixed inset-0 bg-brand-deep/60 backdrop-blur-sm z-50 hidden opacity-0 flex items-center justify-center p-4">
+    <div id="checkoutModalContent"
+      class="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 shadow-2xl border border-brand-muted/20 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-4 border-b border-brand-muted/20 mb-5">
+        <div>
+          <span class="text-xs text-brand font-bold">خطوة الدفع والتوصيل</span>
+          <h3 class="font-display text-2xl text-brand-deep">إتمام الطلب</h3>
+        </div>
+        <button onclick="closeCheckoutModal()"
+          class="w-8 h-8 rounded-full bg-brand-surface flex items-center justify-center text-brand-deep font-bold hover:bg-brand-light transition">✕</button>
+      </div>
+
+      <form id="checkoutForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">الاسم الكامل *</label>
+          <input type="text" id="custName" required placeholder="مثال: منيرة السبيعي"
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-brand-deep mb-1">رقم الجوال *</label>
+            <input type="tel" id="custPhone" required placeholder="05xxxxxxxx"
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand"
+              dir="ltr">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brand-deep mb-1">المدينة *</label>
+            <select id="custCity"
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+              <option value="الرياض">الرياض</option>
+              <option value="جدة">جدة</option>
+              <option value="الدمام">الدمام</option>
+              <option value="مكة المكرمة">مكة المكرمة</option>
+              <option value="المدينة المنورة">المدينة المنورة</option>
+              <option value="الخبر">الخبر</option>
+              <option value="أخرى">مدينة أخرى</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">العنوان التفصيلي والحي *</label>
+          <input type="text" id="custAddress" required placeholder="مثال: حي الياسمين، شارع أنس بن مالك"
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">طريقة الدفع المفضلة</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label
+              class="border border-brand-muted/30 rounded-xl p-3 text-center cursor-pointer hover:border-brand transition has-[:checked]:bg-brand-light/30 has-[:checked]:border-brand">
+              <input type="radio" name="paymentMethod" value="الدفع عند الاستلام" checked class="hidden">
+              <span class="block text-xs font-bold text-brand-deep">عند الاستلام</span>
+            </label>
+            <label
+              class="border border-brand-muted/30 rounded-xl p-3 text-center cursor-pointer hover:border-brand transition has-[:checked]:bg-brand-light/30 has-[:checked]:border-brand">
+              <input type="radio" name="paymentMethod" value="مدى / بطاقة ائتمان" class="hidden">
+              <span class="block text-xs font-bold text-brand-deep">مدى / فيزا</span>
+            </label>
+            <label
+              class="border border-brand-muted/30 rounded-xl p-3 text-center cursor-pointer hover:border-brand transition has-[:checked]:bg-brand-light/30 has-[:checked]:border-brand">
+              <input type="radio" name="paymentMethod" value="أبل باي (Apple Pay)" class="hidden">
+              <span class="block text-xs font-bold text-brand-deep">Apple Pay</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="bg-brand-surface p-4 rounded-2xl border border-brand-muted/20">
+          <div class="flex justify-between items-center text-sm font-bold text-brand-deep">
+            <span>المبلغ المستحق للدفع:</span>
+            <span id="checkoutOrderTotal" class="text-brand text-lg">0 ر.س</span>
+          </div>
+          <p class="text-[11px] text-brand-muted mt-1">يتم حفظ الطلب وإرساله مباشرةً لنظام إدارة المتجر المركزي.</p>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-brand hover:bg-brand-dark text-white py-3.5 rounded-full font-bold transition shadow-lg shadow-brand/30">
+          تأكيد الطلب الآن
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== Review Modal ===================== -->
+  <div id="reviewModalOverlay"
+    class="overlay fixed inset-0 bg-brand-deep/50 backdrop-blur-sm z-50 hidden opacity-0 flex items-center justify-center p-4">
+    <div id="reviewModalContent"
+      class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-brand-muted/20 relative transform scale-95 transition-transform duration-300">
+      <div class="flex items-center justify-between mb-4 border-b border-brand-muted/20 pb-3">
+        <h3 class="font-display text-2xl text-brand-deep">أضيفي رأيكِ أو تجربتكِ</h3>
+        <button id="closeReviewModal"
+          class="w-8 h-8 rounded-full bg-brand-surface flex items-center justify-center text-brand-deep hover:bg-brand-light"
+          aria-label="إغلاق">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+      <form id="reviewForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold mb-1 text-brand-deep">اسمكِ الكريمة:</label>
+          <input type="text" id="reviewerName" required placeholder="مثال: سارة أحمد"
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1 text-brand-deep">تقييمكِ لمنتجاتنا:</label>
+          <select id="reviewRating"
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+            <option value="★★★★★">★★★★★ (ممتاز جداً 5 نجوم)</option>
+            <option value="★★★★☆">★★★★☆ (جيد جداً 4 نجوم)</option>
+            <option value="★★★☆☆">★★★☆☆ (مقبول 3 نجوم)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1 text-brand-deep">مشاركتكِ ورأيكِ:</label>
+          <textarea id="reviewText" required rows="4" placeholder="اكتبي تعليقكِ أو أثر المنتج على بشرتكِ..."
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand resize-none"></textarea>
+        </div>
+        <button type="submit"
+          class="w-full bg-brand hover:bg-brand-dark text-white py-3 rounded-full font-bold transition shadow-md">إرسال
+          الرأي</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== Admin Login Modal ===================== -->
+  <div id="adminLoginModalOverlay"
+    class="overlay fixed inset-0 bg-brand-deep/70 backdrop-blur-md z-50 hidden opacity-0 flex items-center justify-center p-4">
+    <div id="adminLoginModalContent"
+      class="bg-white rounded-3xl max-w-sm w-full p-7 md:p-8 shadow-2xl border border-brand-muted/20 relative transform scale-95 transition-transform duration-300">
+      <div class="text-center mb-6">
+        <div
+          class="w-14 h-14 rounded-2xl bg-brand text-white mx-auto flex items-center justify-center mb-3 shadow-lg shadow-brand/30">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+        <h3 class="font-display text-2xl text-brand-deep">تسجيل دخول</h3>
+
+      </div>
+
+      <form id="adminLoginForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">اسم المستخدم</label>
+          <div class="relative">
+            <input type="text" id="adminUsername" required placeholder="admin"
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl pr-10 pl-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              class="absolute right-3 top-3 text-brand-muted">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">كلمة المرور</label>
+          <div class="relative">
+            <input type="password" id="adminPassword" required placeholder="•••••"
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl pr-10 pl-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              class="absolute right-3 top-3 text-brand-muted">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+        </div>
+
+        <div id="adminLoginError"
+          class="hidden text-xs text-rose-600 bg-rose-50 border border-rose-200 p-2.5 rounded-xl font-bold text-center">
+          اسم المستخدم أو كلمة المرور غير صحيحة!
+        </div>
+
+        <button type="submit"
+          class="w-full bg-brand hover:bg-brand-dark text-white py-3 rounded-xl font-bold text-sm transition shadow-md shadow-brand/25 flex items-center justify-center gap-2">
+          <span>تسجيل دخول</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+            <polyline points="10 17 15 12 10 7" />
+            <line x1="15" y1="12" x2="3" y2="12" />
+          </svg>
+        </button>
+
+        <button type="button" onclick="closeAdminLoginModal()"
+          class="w-full bg-brand-surface hover:bg-brand-light/50 text-brand-deep py-2.5 rounded-xl text-xs font-bold transition">
+          إلغاء
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== Toast ===================== -->
+  <div id="toast"
+    class="toast fixed bottom-6 left-1/2 -translate-x-1/2 translate-y-24 opacity-0 bg-brand-deep text-white px-6 py-3 rounded-full z-50 text-sm font-bold shadow-2xl border border-brand-accent/30 flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-brand-accent"></span>
+    <span id="toastMsg">تمت الإضافة إلى السلة بنجاح</span>
+  </div>
+
+  <!-- Load Shared Store Data -->
+  <script src="store.js"></script>
+
+  <script>
+    /* ===================== Hero Slides Data ===================== */
+    const HERO_SLIDES = [
+      {
+        subtitle: "مستخلصات نباتية · بلا حشوات · نتائج تُلمس",
+        title: "بشرتكِ تستحق<br>عناية تُشبهها",
+        desc: "منتجات نصنعها من مستخلصات نباتية موثّقة، بتركيبات مركّزة وبسيطة، لروتين عناية يوميّ تثقين به من أول استخدام.",
+        type: "img",
+        url: "ww.jpg"
+      },
+      {
+        subtitle: "إشراقة طبيعية تدوم طويلاً",
+        title: "سيروم النضارة<br>والفيتامينات المركزة",
+        desc: "غذّي بشرتكِ بأجود مستخلصات فيتامين سي الطبيعية لتوحيد لون البشرة ومحاربة علامات التقدم في السن بفعالية قصوى.",
+        type: "img",
+        url: "d.jpg",
+        badge: "الأكثر مبيعاً"
+      },
+      {
+        subtitle: "ترطيب عميق وحماية مثالية",
+        title: "مجموعة العناية<br>العضوية الفاخرة",
+        desc: "تركيبات غنية بالمستخلصات العضوية والزيوت النقية المصممة خصيصاً لتمنح بشرتكِ ملمساً حريرياً ناعماً طوال اليوم.",
+        type: "img",
+        url: "7.jpg",
+        badge: "جديد وحصري"
+      },
+      {
+        subtitle: "عناية متكاملة لشعر صحي",
+        title: "زيوت الأرغان النقية<br>لشعر لامع وقوي",
+        desc: "استعيدي حيوية ورطوبة شعركِ من الجذر إلى الأطراف مع زيوتنا العضوية الخالية من أي إضافات ضارة.",
+        type: "img",
+        url: "m.jpg",
+        badge: "عرض خاص"
+      }
+    ];
+
+    let currentSlide = 0;
+    let slideInterval;
+    let cart = [];
+
+    /* ===================== Render Hero Slider ===================== */
+    function renderHeroSlide() {
+      const slider = document.getElementById("heroSlider");
+      const dots = document.getElementById("sliderDots");
+      const s = HERO_SLIDES[currentSlide];
+
+      slider.innerHTML = `
+    <div class="grid md:grid-cols-2 gap-14 items-center transition-opacity duration-700 opacity-100">
+      <div>
+        <span class="inline-block bg-brand-accent/20 text-brand-accent border border-brand-accent/30 text-xs font-bold px-3.5 py-1.5 rounded-full mb-4">${s.subtitle}</span>
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.25] mb-6">
+          ${s.title}
+        </h1>
+        <p class="text-white/80 text-base md:text-lg leading-loose max-w-md mb-9">
+          ${s.desc}
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#products" class="bg-brand-accent text-brand-deep px-8 py-3.5 rounded-full font-bold hover:bg-white transition shadow-lg shadow-brand-accent/20">تسوّقي المجموعة</a>
+        </div>
+      </div>
+
+      <div class="relative flex justify-center">
+        <div class="relative group">
+          <div class="blob bg-brand-accent/20 w-72 h-72 md:w-96 md:h-96 absolute -z-0 -top-4 -right-4 blur-xl"></div>
+          <img src="${s.url}" alt="منتج ترويجي" class="w-72 h-72 md:w-80 md:h-80 object-cover rounded-3xl shadow-2xl border-4 border-white/20 relative z-10 transform group-hover:scale-105 transition duration-500">
+          ${s.badge ? `<span class="absolute top-4 right-4 z-20 bg-brand-accent text-brand-deep text-xs font-bold px-3.5 py-1.5 rounded-full shadow-md">${s.badge}</span>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+
+      dots.innerHTML = HERO_SLIDES.map((_, idx) => `
+    <button onclick="goToSlide(${idx})" aria-label="شريحة ${idx + 1}" class="h-2.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-8 bg-brand-accent' : 'w-2.5 bg-white/30 hover:bg-white/50'}"></button>
+  `).join("");
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % HERO_SLIDES.length;
+      renderHeroSlide();
+    }
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + HERO_SLIDES.length) % HERO_SLIDES.length;
+      renderHeroSlide();
+    }
+    function goToSlide(idx) {
+      currentSlide = idx;
+      renderHeroSlide();
+      resetTimer();
+    }
+    function resetTimer() {
+      clearInterval(slideInterval);
+      slideInterval = setInterval(nextSlide, 6000);
+    }
+
+    document.getElementById("nextSlide").addEventListener("click", () => { nextSlide(); resetTimer(); });
+    document.getElementById("prevSlide").addEventListener("click", () => { prevSlide(); resetTimer(); });
+
+    renderHeroSlide();
+    resetTimer();
+
+    /* ===================== Products Rendering from Shared Store ===================== */
+    function productCardHTML(p) {
+      return `
+  <div class="product-card group bg-white rounded-3xl overflow-hidden border border-brand-muted/25 shadow-sm hover:shadow-xl flex flex-col justify-between cursor-pointer" onclick="openProductModal(${p.id})" data-cat="${p.cat}">
+    <div class="relative h-44 md:h-52 overflow-hidden flex items-center justify-center bg-brand-surface">
+      <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+      ${p.tag ? `<span class="absolute top-3 right-3 bg-brand-accent text-brand-deep text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">${p.tag}</span>` : ""}
+      ${(p.stock !== undefined && p.stock <= 0) ? `<span class="absolute inset-0 bg-brand-deep/70 backdrop-blur-xs flex items-center justify-center text-white text-xs font-bold">نفد من المخزون</span>` : ''}
+    </div>
+    <div class="p-4 md:p-5 flex flex-col justify-between flex-grow">
+      <div>
+        <span class="text-[11px] text-brand font-bold mb-1 inline-block">${p.cat}</span>
+        <h3 class="font-bold text-sm md:text-base text-brand-deep mb-2 leading-snug">${p.name}</h3>
+      </div>
+      <div class="flex items-center justify-between mt-3 pt-3 border-t border-brand-muted/15">
+        <span class="font-display text-lg md:text-xl font-bold text-brand-deep">${p.price} ر.س</span>
+        <button onclick="event.stopPropagation(); addToCart(${p.id})" class="bg-brand hover:bg-brand-dark text-white w-9 h-9 rounded-full flex items-center justify-center transition shadow-md shadow-brand/20" aria-label="أضيفي إلى السلة">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>`;
+    }
+
+    function renderProducts(filter = "all", searchQuery = "") {
+      const grid = document.getElementById("productGrid");
+      const products = MyCareStore.getProducts();
+
+      let list = filter === "all" ? products : products.filter(p => p.cat === filter);
+
+      if (searchQuery.trim() !== "") {
+        const query = searchQuery.toLowerCase().trim();
+        list = list.filter(p => p.name.toLowerCase().includes(query) || p.cat.toLowerCase().includes(query) || (p.desc && p.desc.toLowerCase().includes(query)));
+      }
+
+      if (list.length === 0) {
+        grid.innerHTML = `<p class="col-span-full text-center text-brand-muted py-14 text-sm font-bold">عذراً، لم نجد نتائج مطابقة لبحثك 🌿</p>`;
+        return;
+      }
+
+      grid.innerHTML = list.map(productCardHTML).join("");
+    }
+    renderProducts();
+
+    /* ===================== Product Details Modal Controls ===================== */
+    function openProductModal(id) {
+      const product = MyCareStore.getProductById(id);
+      if (!product) return;
+
+      let modalOverlay = document.getElementById("productDetailModal");
+      if (!modalOverlay) {
+        const modalHTML = `
+      <div id="productDetailModal" class="fixed inset-0 z-50 bg-brand-deep/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div id="productDetailContent" class="bg-white rounded-3xl max-w-xl w-full p-6 md:p-8 relative transform scale-95 transition-transform duration-300 shadow-2xl max-h-[90vh] overflow-y-auto border border-brand-muted/20">
+          <button onclick="closeProductModal()" class="absolute top-4 left-4 w-9 h-9 bg-brand-surface rounded-full flex items-center justify-center text-brand-deep font-bold hover:bg-brand-light transition">✕</button>
+          
+          <div class="grid md:grid-cols-2 gap-6 items-center">
+            <div class="h-56 md:h-64 rounded-2xl overflow-hidden bg-brand-surface shadow-inner border border-brand-muted/20">
+              <img id="modalProductImg" src="" alt="" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <span id="modalProductCat" class="inline-block text-[11px] bg-brand-light/60 text-brand-dark font-bold px-3 py-1 rounded-full mb-2"></span>
+              <h2 id="modalProductName" class="text-2xl font-bold mb-2 text-brand-deep"></h2>
+              <p id="modalProductPrice" class="font-display text-2xl text-brand font-bold mb-4"></p>
+              <div class="text-xs text-brand-muted font-bold mb-1">الحجم: <span id="modalProductSize" class="font-normal text-brand-deep"></span></div>
+              <div class="text-xs text-brand-muted font-bold">حالة المخزون: <span id="modalProductStock" class="font-bold text-brand"></span></div>
+            </div>
+          </div>
+
+          <div class="mt-6 space-y-4 border-t border-brand-muted/20 pt-5">
+            <div>
+              <h4 class="font-bold text-sm text-brand-deep mb-1">وصف المنتج ومكوناته</h4>
+              <p id="modalProductDesc" class="text-xs md:text-sm text-brand-deep/80 leading-relaxed"></p>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-brand-deep mb-1">طريقة الاستخدام المثالية</h4>
+              <p id="modalProductUsage" class="text-xs md:text-sm text-brand-deep/80 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <div class="mt-8 flex gap-4">
+            <button id="modalAddToCartBtn" class="flex-grow bg-brand hover:bg-brand-dark text-white py-3.5 rounded-full font-bold transition shadow-md shadow-brand/30 text-center">أضف إلى السلة</button>
+          </div>
+        </div>
+      </div>
+    `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        modalOverlay = document.getElementById("productDetailModal");
+
+        modalOverlay.addEventListener("click", (e) => {
+          if (e.target === modalOverlay) closeProductModal();
+        });
+      }
+
+      document.getElementById("modalProductImg").src = product.image;
+      document.getElementById("modalProductImg").alt = product.name;
+      document.getElementById("modalProductCat").textContent = product.cat;
+      document.getElementById("modalProductName").textContent = product.name;
+      document.getElementById("modalProductPrice").textContent = product.price + " ر.س";
+      document.getElementById("modalProductSize").textContent = product.size || "100 مل";
+      document.getElementById("modalProductStock").textContent = (product.stock && product.stock > 0) ? `متوفر (${product.stock} قطعة)` : "متوفر";
+      document.getElementById("modalProductDesc").textContent = product.desc;
+      document.getElementById("modalProductUsage").textContent = product.usage;
+
+      const addBtn = document.getElementById("modalAddToCartBtn");
+      addBtn.onclick = () => {
+        addToCart(product.id);
+        closeProductModal();
+      };
+
+      modalOverlay.classList.remove("hidden");
+      setTimeout(() => {
+        modalOverlay.classList.remove("opacity-0");
+        const content = document.getElementById("productDetailContent");
+        content.classList.remove("scale-95");
+        content.classList.add("scale-100");
+      }, 10);
+    }
+
+    function closeProductModal() {
+      const modalOverlay = document.getElementById("productDetailModal");
+      if (!modalOverlay) return;
+      modalOverlay.classList.add("opacity-0");
+      const content = document.getElementById("productDetailContent");
+      content.classList.remove("scale-100");
+      content.classList.add("scale-95");
+      setTimeout(() => modalOverlay.classList.add("hidden"), 300);
+    }
+
+    /* ===================== Render Reviews from Shared Store ===================== */
+    function renderReviews() {
+      const grid = document.getElementById("reviewsGrid");
+      const reviews = MyCareStore.getReviews();
+
+      let html = reviews.slice(0, 7).map(r => `
+    <div class="review-card bg-white border border-brand-muted/20 rounded-3xl p-7 shadow-sm hover:shadow-md flex flex-col justify-between">
+      <div>
+        <p class="text-brand font-bold text-base mb-3 tracking-widest">${r.rating || '★★★★★'}</p>
+        <p class="text-brand-deep/80 text-sm leading-loose mb-5">"${r.text}"</p>
+      </div>
+      <div class="pt-3 border-t border-brand-muted/15 flex justify-between items-center text-xs">
+        <p class="font-bold text-brand-deep">— ${r.name}</p>
+        <span class="text-brand-muted">${r.date || 'عميلة موثقة'}</span>
+      </div>
+    </div>
+  `).join("");
+
+
+
+      grid.innerHTML = html;
+    }
+    renderReviews();
+
+    /* ===================== Filter tabs ===================== */
+    document.getElementById("filterTabs").addEventListener("click", (e) => {
+      const btn = e.target.closest(".tab-btn");
+      if (!btn) return;
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const query = document.getElementById("searchInput") ? document.getElementById("searchInput").value : "";
+      renderProducts(btn.dataset.filter, query);
+    });
+
+    /* ===================== Search functionality (Enter Key & Typing) ===================== */
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        const activeTab = document.querySelector(".tab-btn.active");
+        const currentFilter = activeTab ? activeTab.dataset.filter : "all";
+        renderProducts(currentFilter, searchInput.value);
+      });
+
+      searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const productsSection = document.getElementById("products");
+          if (productsSection) {
+            productsSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    }
+
+    /* ===================== Cart logic ===================== */
+    function addToCart(id) {
+      const line = cart.find(l => l.id === id);
+      if (line) line.qty += 1;
+      else cart.push({ id, qty: 1 });
+      renderCart();
+      showToast("تمت الإضافة إلى السلة بنجاح");
+    }
+
+    function changeQty(id, delta) {
+      const line = cart.find(l => l.id === id);
+      if (!line) return;
+      line.qty += delta;
+      if (line.qty <= 0) cart = cart.filter(l => l.id !== id);
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartItemsContainer = document.getElementById("cartItems");
+      const cartCount = document.getElementById("cartCount");
+      const cartTotal = document.getElementById("cartTotal");
+
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      cartCount.textContent = totalCount;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `<p class="text-center text-brand-muted py-14 text-sm font-bold">سلة المشتريات فارغة حالياً</p>`;
+        cartTotal.textContent = `0 ر.س`;
+        return;
+      }
+
+      let totalPrice = 0;
+      cartItemsContainer.innerHTML = cart.map(item => {
+        const product = MyCareStore.getProductById(item.id);
+        if (!product) return '';
+        const itemTotal = product.price * item.qty;
+        totalPrice += itemTotal;
+        return `
+      <div class="flex items-center justify-between bg-white p-3.5 rounded-2xl border border-brand-muted/20 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl overflow-hidden bg-brand-surface flex-shrink-0 border border-brand-muted/20">
+            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-brand-deep mb-1">${product.name}</h4>
+            <span class="text-xs text-brand font-bold">${product.price} ر.س</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="changeQty(${product.id}, -1)" class="w-7 h-7 rounded-full bg-brand-surface hover:bg-brand-light flex items-center justify-center text-brand-deep font-bold transition">-</button>
+          <span class="text-sm font-bold w-4 text-center text-brand-deep">${item.qty}</span>
+          <button onclick="changeQty(${product.id}, 1)" class="w-7 h-7 rounded-full bg-brand-surface hover:bg-brand-light flex items-center justify-center text-brand-deep font-bold transition">+</button>
+        </div>
+      </div>
+    `;
+      }).join("");
+
+      cartTotal.textContent = `${totalPrice} ر.س`;
+    }
+
+    /* ===================== Toast Notification ===================== */
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastMsg").textContent = message;
+      toast.classList.remove("translate-y-24", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-24", "opacity-0");
+      }, 2500);
+    }
+
+    /* ===================== Cart Drawer Controls ===================== */
+    const cartDrawer = document.getElementById("cartDrawer");
+    const cartOverlay = document.getElementById("cartOverlay");
+
+    function openCart() {
+      cartDrawer.classList.remove("closed");
+      cartOverlay.classList.remove("hidden");
+      setTimeout(() => cartOverlay.classList.remove("opacity-0"), 10);
+    }
+
+    function closeCart() {
+      cartDrawer.classList.add("closed");
+      cartOverlay.classList.add("opacity-0");
+      setTimeout(() => cartOverlay.classList.add("hidden"), 350);
+    }
+
+    document.getElementById("cartToggle").addEventListener("click", openCart);
+    document.getElementById("cartClose").addEventListener("click", closeCart);
+    document.getElementById("cartOverlay").addEventListener("click", closeCart);
+
+    /* ===================== Checkout Modal Controls & Logic ===================== */
+    const checkoutModalOverlay = document.getElementById("checkoutModalOverlay");
+    const checkoutModalContent = document.getElementById("checkoutModalContent");
+
+    function openCheckoutModal() {
+      if (cart.length === 0) {
+        showToast("سلتكِ فارغة! اختاري منتجاً أولاً");
+        return;
+      }
+      closeCart();
+
+      let total = 0;
+      cart.forEach(item => {
+        const p = MyCareStore.getProductById(item.id);
+        if (p) total += (p.price * item.qty);
+      });
+      document.getElementById("checkoutOrderTotal").textContent = `${total} ر.س`;
+
+      checkoutModalOverlay.classList.remove("hidden");
+      setTimeout(() => {
+        checkoutModalOverlay.classList.remove("opacity-0");
+        checkoutModalContent.classList.remove("scale-95");
+        checkoutModalContent.classList.add("scale-100");
+      }, 10);
+    }
+
+    function closeCheckoutModal() {
+      checkoutModalOverlay.classList.add("opacity-0");
+      checkoutModalContent.classList.remove("scale-100");
+      checkoutModalContent.classList.add("scale-95");
+      setTimeout(() => checkoutModalOverlay.classList.add("hidden"), 300);
+    }
+
+    checkoutModalOverlay.addEventListener("click", (e) => {
+      if (e.target === checkoutModalOverlay) closeCheckoutModal();
+    });
+
+    document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const customer = document.getElementById("custName").value.trim();
+      const phone = document.getElementById("custPhone").value.trim();
+      const city = document.getElementById("custCity").value;
+      const address = document.getElementById("custAddress").value.trim();
+      const paymentMethod = document.querySelector("input[name='paymentMethod']:checked")?.value || "الدفع عند الاستلام";
+
+      const orderItems = cart.map(item => {
+        const p = MyCareStore.getProductById(item.id);
+        return {
+          id: item.id,
+          name: p ? p.name : "منتج عنايتي",
+          price: p ? p.price : 0,
+          qty: item.qty
+        };
+      });
+
+      const total = orderItems.reduce((sum, it) => sum + (it.price * it.qty), 0);
+
+      // Save directly to shared store & Supabase database
+      const newOrder = await MyCareStore.createOrder({
+        customer,
+        phone,
+        city,
+        address,
+        paymentMethod,
+        items: orderItems,
+        total
+      });
+
+      // Clear cart
+      cart = [];
+      renderCart();
+      closeCheckoutModal();
+      e.target.reset();
+
+      alert(`شكراً لكِ يا ${customer}! تم تأكيد طلبكِ بنجاح برقم: ${newOrder.id}\n بانتظار رسالة الشحن.`);
+      showToast(`تم إنشاء الطلب بنجاح برقم: ${newOrder.id} `);
+    });
+
+    /* ===================== Review Modal Controls ===================== */
+    const reviewModalOverlay = document.getElementById("reviewModalOverlay");
+    const reviewModalContent = document.getElementById("reviewModalContent");
+
+    function openReviewModal() {
+      reviewModalOverlay.classList.remove("hidden");
+      setTimeout(() => {
+        reviewModalOverlay.classList.remove("opacity-0");
+        reviewModalContent.classList.remove("scale-95");
+        reviewModalContent.classList.add("scale-100");
+      }, 10);
+    }
+
+    function closeReviewModal() {
+      reviewModalOverlay.classList.add("opacity-0");
+      reviewModalContent.classList.remove("scale-100");
+      reviewModalContent.classList.add("scale-95");
+      setTimeout(() => reviewModalOverlay.classList.add("hidden"), 300);
+    }
+
+    document.getElementById("closeReviewModal").addEventListener("click", closeReviewModal);
+    reviewModalOverlay.addEventListener("click", (e) => {
+      if (e.target === reviewModalOverlay) closeReviewModal();
+    });
+
+    document.getElementById("reviewForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("reviewerName").value.trim();
+      const rating = document.getElementById("reviewRating").value;
+      const text = document.getElementById("reviewText").value.trim();
+
+      // Save review to shared store & Supabase
+      await MyCareStore.addReview({ name, rating, text });
+      renderReviews();
+      closeReviewModal();
+      e.target.reset();
+
+      showToast("تم إرسال رأيكِ بنجاح وظهوره في المتجر ولوحة الإدارة 🌿");
+    });
+
+    /* ===================== Toggles & Forms ===================== */
+    document.getElementById("searchToggle").addEventListener("click", () => {
+      const sb = document.getElementById("searchBar");
+      sb.classList.toggle("hidden");
+      if (!sb.classList.contains("hidden")) {
+        document.getElementById("searchInput").focus();
+      } else {
+        document.getElementById("searchInput").value = "";
+        renderProducts();
+      }
+    });
+
+    document.getElementById("menuToggle").addEventListener("click", () => {
+      document.getElementById("mobileMenu").classList.toggle("hidden");
+    });
+
+    document.getElementById("newsletterForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      document.getElementById("newsletterMsg").classList.remove("hidden");
+      showToast("تم اشتراككِ بنجاح 🌿");
+      e.target.reset();
+    });
+
+    // Reactive listener to auto-refresh products and reviews if modified in admin dashboard
+    window.addEventListener('mycare:data_updated', () => {
+      renderProducts();
+      renderReviews();
+    });
+
+    /* ===================== Admin Login Modal Controls ===================== */
+    const adminLoginModalOverlay = document.getElementById("adminLoginModalOverlay");
+    const adminLoginModalContent = document.getElementById("adminLoginModalContent");
+
+    function openAdminLoginModal() {
+      document.getElementById("adminLoginForm").reset();
+      const err = document.getElementById("adminLoginError");
+      if (err) err.classList.add("hidden");
+
+      adminLoginModalOverlay.classList.remove("hidden");
+      setTimeout(() => {
+        adminLoginModalOverlay.classList.remove("opacity-0");
+        adminLoginModalContent.classList.remove("scale-95");
+        adminLoginModalContent.classList.add("scale-100");
+        document.getElementById("adminUsername").focus();
+      }, 10);
+    }
+
+    function closeAdminLoginModal() {
+      adminLoginModalOverlay.classList.add("opacity-0");
+      adminLoginModalContent.classList.remove("scale-100");
+      adminLoginModalContent.classList.add("scale-95");
+      setTimeout(() => adminLoginModalOverlay.classList.add("hidden"), 300);
+    }
+
+    adminLoginModalOverlay?.addEventListener("click", (e) => {
+      if (e.target === adminLoginModalOverlay) closeAdminLoginModal();
+    });
+
+    document.getElementById("adminLoginForm")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const u = document.getElementById("adminUsername").value.trim();
+      const p = document.getElementById("adminPassword").value.trim();
+      const err = document.getElementById("adminLoginError");
+
+      if (u === "admin" && p === "admin") {
+        localStorage.setItem("mycare_admin_auth", "true");
+        showToast("تم التحقق بنجاح! جاري الانتقال للوحة التحكم...");
+        setTimeout(() => {
+          window.location.href = "admin.html";
+        }, 500);
+      } else {
+        err.classList.remove("hidden");
+        err.textContent = "اسم المستخدم أو كلمة المرور غير صحيحة! (admin / admin)";
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عنايتي — لوحة التحكم والإدارة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              deep: '#0F3D33',     // الأعمق
+              dark: '#186655',     // الداكن
+              DEFAULT: '#218A73',  // الأساسي
+              accent: '#2CB899',   // الساطع / حيوي
+              light: '#C5E0C9',    // الفاتح
+              muted: '#A2B8A5',    // الهادئ / رمادي مخضر
+              surface: '#F4F9F5',  // خلفية ناعمة فاتحة
+            }
+          },
+          fontFamily: {
+            display: ['"Aref Ruqaa"', 'serif'],
+            body: ['Tajawal', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #F4F9F5;
+      color: #0F3D33;
+    }
+
+    .font-display {
+      font-family: 'Aref Ruqaa', serif;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #F4F9F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #A2B8A5;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #218A73;
+    }
+
+    .nav-item.active {
+      background: #186655;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(15, 61, 51, 0.25);
+    }
+
+    .nav-item.active svg {
+      color: #2CB899;
+    }
+
+    .stat-card {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -10px rgba(15, 61, 51, 0.15);
+    }
+
+    .table-row-hover {
+      transition: background-color 0.15s ease;
+    }
+
+    .table-row-hover:hover {
+      background-color: rgba(197, 224, 201, 0.25);
+    }
+
+    .toast {
+      transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), opacity .35s ease;
+    }
+
+    ::selection {
+      background: #2CB899;
+      color: #0F3D33;
+    }
+  </style>
+</head>
+
+<body class="antialiased h-screen overflow-hidden flex flex-col md:flex-row bg-[#F4F9F5]">
+
+  <!-- ================= Sidebar (Fixed / No scroll with content) ================= -->
+  <aside id="sidebar"
+    class="w-full md:w-64 bg-brand-deep text-white flex-shrink-0 flex flex-col justify-between z-30 transition-all duration-300 md:h-screen md:sticky md:top-0 border-l border-brand-dark/40 shadow-xl overflow-y-auto">
+    <div>
+      <!-- Brand Logo / Header -->
+      <div class="h-20 flex items-center justify-between px-6 border-b border-brand-dark">
+        <a href="admin.html" class="flex items-center gap-3">
+          <div>
+            <h1 class="font-display text-2xl tracking-wide text-white">عنايتي</h1>
+          </div>
+        </a>
+        <button id="mobileSidebarToggle" class="md:hidden text-brand-muted hover:text-white p-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Quick Store Link -->
+      <div class="px-5 py-4">
+        <a href="index.html"
+          class="flex items-center justify-between bg-brand-dark/80 hover:bg-brand text-brand-light hover:text-white px-3.5 py-2.5 rounded-xl text-xs font-bold transition duration-200 border border-brand-accent/20 group">
+          <span class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+            معاينة المتجر
+          </span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            class="transform group-hover:-translate-x-1 transition">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav id="sidebarNav" class="px-3 space-y-1.5 text-sm">
+        <button onclick="switchTab('overview')" data-tab="overview"
+          class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-brand-muted hover:text-white hover:bg-brand-dark/50 transition">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          نظرة عامة وإحصائيات
+        </button>
+
+        <button onclick="switchTab('products')" data-tab="products"
+          class="nav-item w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold text-brand-muted hover:text-white hover:bg-brand-dark/50 transition">
+          <span class="flex items-center gap-3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            إدارة المنتجات
+          </span>
+          <span id="navProductsBadge"
+            class="bg-brand text-brand-light text-xs px-2 py-0.5 rounded-full font-bold">8</span>
+        </button>
+
+        <button onclick="switchTab('orders')" data-tab="orders"
+          class="nav-item w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold text-brand-muted hover:text-white hover:bg-brand-dark/50 transition">
+          <span class="flex items-center gap-3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+              <rect x="9" y="3" width="6" height="4" rx="2" />
+              <path d="m9 14 2 2 4-4" />
+            </svg>
+            الطلبات والمبيعات
+          </span>
+          <span id="navOrdersBadge"
+            class="bg-brand-accent text-brand-deep text-xs px-2 py-0.5 rounded-full font-bold">4</span>
+        </button>
+
+        <button onclick="switchTab('reviews')" data-tab="reviews"
+          class="nav-item w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold text-brand-muted hover:text-white hover:bg-brand-dark/50 transition">
+          <span class="flex items-center gap-3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            آراء العميلات
+          </span>
+          <span id="navReviewsBadge"
+            class="bg-brand-dark text-brand-muted text-xs px-2 py-0.5 rounded-full font-bold">4</span>
+        </button>
+
+        <button onclick="switchTab('settings')" data-tab="settings"
+          class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-brand-muted hover:text-white hover:bg-brand-dark/50 transition">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+          إعدادات المتجر
+        </button>
+      </nav>
+    </div>
+
+    <!-- Admin User Info / Logout -->
+    <div class="p-4 border-t border-brand-dark">
+      <div class="flex items-center justify-between p-2.5 bg-brand-dark/40 rounded-xl">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-9 h-9 rounded-full bg-brand-accent/20 border border-brand-accent text-brand-accent flex items-center justify-center font-bold text-xs">
+            مدير
+          </div>
+          <div class="min-w-0">
+            <p class="text-xs font-bold text-white truncate">إدارة عنايتي</p>
+            <p class="text-[10px] text-brand-muted truncate">admin</p>
+          </div>
+        </div>
+        <button onclick="logoutAdmin()" title="تسجيل الخروج والعودة للمتجر"
+          class="text-rose-400 hover:text-white p-2 rounded-lg hover:bg-rose-900/40 transition flex items-center gap-1 text-xs">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= Main Content Area (Scrollable Only) ================= -->
+  <main class="flex-1 h-screen overflow-y-auto flex flex-col min-w-0">
+
+    <!-- Top Header -->
+    <header
+      class="h-20 bg-white border-b border-brand-muted/20 px-6 md:px-10 flex items-center justify-between sticky top-0 z-20 shadow-sm flex-shrink-0">
+      <div class="flex items-center gap-4">
+        <div>
+          <h2 id="pageTitle" class="text-xl md:text-2xl font-bold text-brand-deep">لوحة التحكم</h2>
+          <p class="text-xs text-brand-muted hidden sm:block">متابعة المبيعات، المنتجات، والطلبات بشكل مباشر</p>
+        </div>
+      </div>
+
+
+
+    </header>
+
+    <!-- Page Views Container -->
+    <div class="p-6 md:p-10 flex-1 space-y-8">
+
+      <!-- ================= Tab 1: Overview ================= -->
+      <section id="tab-overview" class="space-y-8">
+
+        <!-- Welcome Banner -->
+        <div
+          class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-deep via-brand-dark to-brand text-white p-7 md:p-10 shadow-lg">
+          <div class="relative z-10 max-w-2xl">
+            <span
+              class="inline-block bg-brand-accent/20 text-brand-accent border border-brand-accent/30 text-xs font-bold px-3 py-1 rounded-full mb-3">
+              نظام إدارة متجر عنايتي v2.0
+            </span>
+            <h2 class="font-display text-3xl md:text-4xl leading-tight mb-3">مرحباً بكِ في لوحة التحكم المركزية</h2>
+            <p class="text-brand-light/90 text-sm md:text-base leading-relaxed mb-6">
+              تحكم كامل بالمنتجات، تفاعل فوري مع طلبات العميلات، وتحديث فوري للمخزون والتقييمات مع مزامنة كاملة للمتجر.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="switchTab('orders')"
+                class="bg-brand-accent text-brand-deep font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-white transition shadow-md">
+                معاينة الطلبات الجديدة (<span id="bannerPendingOrders">0</span>)
+              </button>
+              <button onclick="openProductModal()"
+                class="bg-white/10 hover:bg-white/20 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition border border-white/20">
+                + إضافة منتج جديد
+              </button>
+            </div>
+          </div>
+          <!-- Decorative leaf shapes -->
+          <div
+            class="absolute -left-10 -bottom-10 w-64 h-64 bg-brand-accent/10 rounded-full blur-2xl pointer-events-none">
+          </div>
+          <div class="absolute left-1/3 top-0 w-48 h-48 bg-brand-light/10 rounded-full blur-xl pointer-events-none">
+          </div>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Card 1: Revenue -->
+          <div
+            class="stat-card bg-white p-6 rounded-3xl border border-brand-muted/20 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-brand-muted">إجمالي المبيعات</span>
+              <div class="w-10 h-10 rounded-2xl bg-brand-light/40 text-brand flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h3 id="statTotalSales" class="font-display text-3xl font-bold text-brand-deep">0 ر.س</h3>
+              <p class="text-[11px] text-brand-accent font-bold mt-2 flex items-center gap-1">
+                <span>↑ +18.4%</span>
+                <span class="text-brand-muted font-normal">مقارنة بالأسبوع الماضي</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2: Orders -->
+          <div
+            class="stat-card bg-white p-6 rounded-3xl border border-brand-muted/20 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-brand-muted">إجمالي الطلبات</span>
+              <div class="w-10 h-10 rounded-2xl bg-brand-accent/20 text-brand-dark flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h3 id="statTotalOrders" class="font-display text-3xl font-bold text-brand-deep">0</h3>
+              <p class="text-[11px] text-brand-dark font-bold mt-2 flex items-center gap-2">
+                <span id="statCompletedOrders" class="text-brand">0 مكتمل</span>
+                <span>•</span>
+                <span id="statPendingOrders" class="text-brand-accent">0 قيد التنفيذ</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3: Products -->
+          <div
+            class="stat-card bg-white p-6 rounded-3xl border border-brand-muted/20 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-brand-muted">المنتجات النشطة</span>
+              <div class="w-10 h-10 rounded-2xl bg-brand/10 text-brand flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h3 id="statTotalProducts" class="font-display text-3xl font-bold text-brand-deep">0</h3>
+              <p class="text-[11px] text-brand-muted font-bold mt-2 flex items-center gap-1">
+                <span id="statLowStock" class="text-amber-600">0 قارب على النفاد</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 4: Customer Satisfaction -->
+          <div
+            class="stat-card bg-white p-6 rounded-3xl border border-brand-muted/20 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-brand-muted">تقييم العميلات</span>
+              <div class="w-10 h-10 rounded-2xl bg-brand-light/50 text-brand-dark flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-display text-3xl font-bold text-brand-deep">4.9 / 5</h3>
+              <p class="text-[11px] text-brand-muted font-bold mt-2">
+                بناءً على <span id="statReviewsCount">0</span> مراجعة موثقة
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sales Analytics & Category Chart -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          <!-- Sales distribution chart -->
+          <div class="lg:col-span-2 bg-white rounded-3xl p-6 md:p-8 border border-brand-muted/20 shadow-sm">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h3 class="font-bold text-lg text-brand-deep">حركة المبيعات خلال الأسبوع</h3>
+                <p class="text-xs text-brand-muted">المبيعات اليومية المحققة عبر المتجر</p>
+              </div>
+              <span class="text-xs font-bold bg-brand-light/50 text-brand-deep px-3 py-1 rounded-full">أكتوبر
+                2026</span>
+            </div>
+
+            <!-- Custom CSS/HTML Bar Chart -->
+            <div class="h-56 flex items-end justify-between gap-3 pt-6 border-b border-brand-muted/20 px-4">
+              <div class="flex-1 flex flex-col items-center gap-2 group">
+                <div
+                  class="text-[10px] text-brand-muted group-hover:text-brand font-bold opacity-0 group-hover:opacity-100 transition">
+                  340 ر.س</div>
+                <div class="w-full bg-brand-light/60 hover:bg-brand-accent rounded-t-xl transition-all duration-300"
+                  style="height: 45%;"></div>
+                <span class="text-xs text-brand-muted font-bold">السبت</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 group">
+                <div
+                  class="text-[10px] text-brand-muted group-hover:text-brand font-bold opacity-0 group-hover:opacity-100 transition">
+                  520 ر.س</div>
+                <div class="w-full bg-brand-light/60 hover:bg-brand-accent rounded-t-xl transition-all duration-300"
+                  style="height: 65%;"></div>
+                <span class="text-xs text-brand-muted font-bold">الأحد</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 group">
+                <div
+                  class="text-[10px] text-brand-muted group-hover:text-brand font-bold opacity-0 group-hover:opacity-100 transition">
+                  410 ر.س</div>
+                <div class="w-full bg-brand-light/60 hover:bg-brand-accent rounded-t-xl transition-all duration-300"
+                  style="height: 52%;"></div>
+                <span class="text-xs text-brand-muted font-bold">الإثنين</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 group">
+                <div
+                  class="text-[10px] text-brand-muted group-hover:text-brand font-bold opacity-0 group-hover:opacity-100 transition">
+                  680 ر.س</div>
+                <div class="w-full bg-brand-light/60 hover:bg-brand-accent rounded-t-xl transition-all duration-300"
+                  style="height: 80%;"></div>
+                <span class="text-xs text-brand-muted font-bold">الثلاثاء</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 group">
+                <div
+                  class="text-[10px] text-brand-muted group-hover:text-brand font-bold opacity-0 group-hover:opacity-100 transition">
+                  890 ر.س</div>
+                <div class="w-full bg-brand hover:bg-brand-dark rounded-t-xl transition-all duration-300 shadow-md"
+                  style="height: 95%;"></div>
+                <span class="text-xs text-brand font-bold">الأربعاء</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 group">
+                <div
+                  class="text-[10px] text-brand-muted group-hover:text-brand font-bold opacity-0 group-hover:opacity-100 transition">
+                  750 ر.س</div>
+                <div class="w-full bg-brand-accent rounded-t-xl transition-all duration-300" style="height: 88%;"></div>
+                <span class="text-xs text-brand font-bold">الخميس</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 group">
+                <div
+                  class="text-[10px] text-brand-muted group-hover:text-brand font-bold opacity-0 group-hover:opacity-100 transition">
+                  590 ر.س</div>
+                <div class="w-full bg-brand-light/60 hover:bg-brand-accent rounded-t-xl transition-all duration-300"
+                  style="height: 70%;"></div>
+                <span class="text-xs text-brand-muted font-bold">الجمعة</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-xs text-brand-muted mt-4">
+              <span class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded bg-brand"></span> اليوم الأعلى مبيعاً (الأربعاء)
+              </span>
+              <span>متوسط المبيعات اليومي: 600 ر.س</span>
+            </div>
+          </div>
+
+          <!-- Category Breakdown -->
+          <div
+            class="bg-white rounded-3xl p-6 md:p-8 border border-brand-muted/20 shadow-sm flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-lg text-brand-deep mb-1">توزيع المنتجات والمبيعات</h3>
+              <p class="text-xs text-brand-muted mb-6">حسب تصنيفات المتجر الثلاثة</p>
+
+              <div class="space-y-4">
+                <!-- Cat 1 -->
+                <div>
+                  <div class="flex justify-between text-xs font-bold mb-1.5">
+                    <span class="text-brand-deep">عناية بالبشرة</span>
+                    <span class="text-brand">60%</span>
+                  </div>
+                  <div class="w-full bg-brand-surface rounded-full h-3 overflow-hidden">
+                    <div class="bg-brand h-full rounded-full" style="width: 60%"></div>
+                  </div>
+                </div>
+
+                <!-- Cat 2 -->
+                <div>
+                  <div class="flex justify-between text-xs font-bold mb-1.5">
+                    <span class="text-brand-deep">عناية بالشعر</span>
+                    <span class="text-brand-dark">25%</span>
+                  </div>
+                  <div class="w-full bg-brand-surface rounded-full h-3 overflow-hidden">
+                    <div class="bg-brand-accent h-full rounded-full" style="width: 25%"></div>
+                  </div>
+                </div>
+
+                <!-- Cat 3 -->
+                <div>
+                  <div class="flex justify-between text-xs font-bold mb-1.5">
+                    <span class="text-brand-deep">عناية بالجسم</span>
+                    <span class="text-brand-muted">15%</span>
+                  </div>
+                  <div class="w-full bg-brand-surface rounded-full h-3 overflow-hidden">
+                    <div class="bg-brand-muted h-full rounded-full" style="width: 15%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 p-4 bg-brand-surface rounded-2xl border border-brand-muted/20">
+              <p class="text-xs font-bold text-brand-deep mb-1">💡 نصيحة الإدارة الذكية</p>
+              <p class="text-[11px] text-brand-dark/80 leading-relaxed">
+                سيروم فيتامين سي هو المنتج الأكثر طلباً هذا الشهر. ننصح بمتابعة رصيد المخزون لتفادي نفاده.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders Snapshot -->
+        <div class="bg-white rounded-3xl p-6 md:p-8 border border-brand-muted/20 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <h3 class="font-bold text-lg text-brand-deep">أحدث طلبات العميلات</h3>
+              <p class="text-xs text-brand-muted">قائمة فورية بآخر الطلبات المسجلة من المتجر</p>
+            </div>
+            <button onclick="switchTab('orders')"
+              class="text-xs font-bold text-brand hover:text-brand-dark flex items-center gap-1 self-start sm:self-auto">
+              عرض جميع الطلبات
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs md:text-sm">
+              <thead>
+                <tr class="border-b border-brand-muted/20 text-brand-muted text-[11px]">
+                  <th class="pb-3 font-bold">رقم الطلب</th>
+                  <th class="pb-3 font-bold">العميلة</th>
+                  <th class="pb-3 font-bold">المدينة</th>
+                  <th class="pb-3 font-bold">التاريخ</th>
+                  <th class="pb-3 font-bold">المجموع</th>
+                  <th class="pb-3 font-bold">الحالة</th>
+                  <th class="pb-3 font-bold text-left">الإجراء</th>
+                </tr>
+              </thead>
+              <tbody id="overviewRecentOrdersBody" class="divide-y divide-brand-muted/10">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= Tab 2: Products ================= -->
+      <section id="tab-products" class="hidden space-y-6">
+
+        <!-- Controls bar -->
+        <div
+          class="bg-white rounded-3xl p-5 md:p-6 border border-brand-muted/20 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="filterProductsTable('all')"
+              class="prod-filter-btn active bg-brand text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">الكل</button>
+            <button onclick="filterProductsTable('بشرة')"
+              class="prod-filter-btn bg-brand-surface text-brand-deep hover:bg-brand-light/50 px-4 py-2 rounded-xl text-xs font-bold transition">بشرة</button>
+            <button onclick="filterProductsTable('شعر')"
+              class="prod-filter-btn bg-brand-surface text-brand-deep hover:bg-brand-light/50 px-4 py-2 rounded-xl text-xs font-bold transition">شعر</button>
+            <button onclick="filterProductsTable('جسم')"
+              class="prod-filter-btn bg-brand-surface text-brand-deep hover:bg-brand-light/50 px-4 py-2 rounded-xl text-xs font-bold transition">جسم</button>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="relative flex-1 md:w-64">
+              <input type="text" id="productSearchInput" oninput="searchProductsTable(this.value)"
+                placeholder="ابحث باسم المنتج أو الحجم..."
+                class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl pr-9 pl-4 py-2 text-xs focus:outline-none focus:border-brand">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="absolute right-3 top-2.5 text-brand-muted">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </div>
+            <button onclick="openProductModal()"
+              class="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm flex-shrink-0">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              منتج جديد
+            </button>
+          </div>
+        </div>
+
+        <!-- Products Table -->
+        <div class="bg-white rounded-3xl border border-brand-muted/20 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs md:text-sm">
+              <thead class="bg-brand-surface border-b border-brand-muted/20 text-brand-muted text-[11px]">
+                <tr>
+                  <th class="py-4 px-6 font-bold">المنتج</th>
+                  <th class="py-4 px-4 font-bold">التصنيف</th>
+                  <th class="py-4 px-4 font-bold">السعر</th>
+                  <th class="py-4 px-4 font-bold">المخزون</th>
+                  <th class="py-4 px-4 font-bold">الشارة</th>
+                  <th class="py-4 px-4 font-bold">الحجم</th>
+                  <th class="py-4 px-6 font-bold text-left">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody" class="divide-y divide-brand-muted/10">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+          <div id="noProductsFound" class="hidden p-12 text-center text-brand-muted">
+            <p class="text-base font-bold">لم يتم العثور على أي منتج مطابق للبحث</p>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= Tab 3: Orders ================= -->
+      <section id="tab-orders" class="hidden space-y-6">
+
+        <!-- Orders Controls Bar -->
+        <div
+          class="bg-white rounded-3xl p-5 md:p-6 border border-brand-muted/20 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="filterOrdersTable('all')"
+              class="order-filter-btn active bg-brand text-white px-4 py-2 rounded-xl text-xs font-bold transition">الكل</button>
+            <button onclick="filterOrdersTable('جديد')"
+              class="order-filter-btn bg-brand-surface text-brand-deep hover:bg-brand-light/50 px-4 py-2 rounded-xl text-xs font-bold transition">جديد</button>
+            <button onclick="filterOrdersTable('قيد التجهيز')"
+              class="order-filter-btn bg-brand-surface text-brand-deep hover:bg-brand-light/50 px-4 py-2 rounded-xl text-xs font-bold transition">قيد
+              التجهيز</button>
+            <button onclick="filterOrdersTable('تم الشحن')"
+              class="order-filter-btn bg-brand-surface text-brand-deep hover:bg-brand-light/50 px-4 py-2 rounded-xl text-xs font-bold transition">تم
+              الشحن</button>
+            <button onclick="filterOrdersTable('مكتمل')"
+              class="order-filter-btn bg-brand-surface text-brand-deep hover:bg-brand-light/50 px-4 py-2 rounded-xl text-xs font-bold transition">مكتمل</button>
+          </div>
+
+          <div class="relative md:w-72">
+            <input type="text" id="orderSearchInput" oninput="searchOrdersTable(this.value)"
+              placeholder="ابحث برقم الطلب أو اسم العميلة..."
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl pr-9 pl-4 py-2 text-xs focus:outline-none focus:border-brand">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              class="absolute right-3 top-2.5 text-brand-muted">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="bg-white rounded-3xl border border-brand-muted/20 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs md:text-sm">
+              <thead class="bg-brand-surface border-b border-brand-muted/20 text-brand-muted text-[11px]">
+                <tr>
+                  <th class="py-4 px-6 font-bold">رقم الطلب</th>
+                  <th class="py-4 px-4 font-bold">العميلة والتواصل</th>
+                  <th class="py-4 px-4 font-bold">المدينة والعنوان</th>
+                  <th class="py-4 px-4 font-bold">التاريخ</th>
+                  <th class="py-4 px-4 font-bold">المنتجات</th>
+                  <th class="py-4 px-4 font-bold">الإجمالي والدفع</th>
+                  <th class="py-4 px-4 font-bold">حالة الطلب</th>
+                  <th class="py-4 px-6 font-bold text-left">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody" class="divide-y divide-brand-muted/10">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+          <div id="noOrdersFound" class="hidden p-12 text-center text-brand-muted">
+            <p class="text-base font-bold">لا توجد طلبات تطابق هذا التصنيف</p>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= Tab 4: Reviews ================= -->
+      <section id="tab-reviews" class="hidden space-y-6">
+
+        <div
+          class="bg-white rounded-3xl p-6 border border-brand-muted/20 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h3 class="font-bold text-lg text-brand-deep">إدارة آراء ومراجعات العميلات</h3>
+            <p class="text-xs text-brand-muted">مراقبة التقييمات الواردة من صفحة المتجر والموافقة عليها</p>
+          </div>
+          <span class="text-xs font-bold bg-brand-light/60 text-brand-deep px-4 py-2 rounded-full">
+            المتوسط العام: ★★★★★ (4.9 / 5.0)
+          </span>
+        </div>
+
+        <!-- Reviews Grid -->
+        <div id="reviewsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+
+      <!-- ================= Tab 5: Settings ================= -->
+      <section id="tab-settings" class="hidden space-y-6">
+        <div class="bg-white rounded-3xl p-6 md:p-8 border border-brand-muted/20 shadow-sm max-w-3xl">
+          <h3 class="font-bold text-xl text-brand-deep mb-2">إعدادات متجر عنايتي</h3>
+          <p class="text-xs text-brand-muted mb-8">تعديل البيانات الأساسية، سياسة الشحن، والتواصل</p>
+
+          <form id="settingsForm" class="space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-bold text-brand-deep mb-2">اسم المتجر</label>
+                <input type="text" id="settingStoreName"
+                  class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-brand-deep mb-2">الشعار اللفظي</label>
+                <input type="text" id="settingTagline"
+                  class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-bold text-brand-deep mb-2">البريد الإلكتروني للدعم</label>
+                <input type="email" id="settingContactEmail"
+                  class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-brand-deep mb-2">رقم الهاتف / الواتساب</label>
+                <input type="text" id="settingContactPhone"
+                  class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-bold text-brand-deep mb-2">العملة الرسمية</label>
+                <input type="text" id="settingCurrency"
+                  class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-brand-deep mb-2">الحد الأدنى للشحن المجاني (ر.س)</label>
+                <input type="number" id="settingFreeShipping"
+                  class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+              </div>
+            </div>
+
+            <div class="pt-6 border-t border-brand-muted/20 flex flex-wrap items-center justify-between gap-4">
+              <button type="submit"
+                class="bg-brand hover:bg-brand-dark text-white px-7 py-3 rounded-xl font-bold text-sm transition shadow-md shadow-brand/20">
+                حفظ الإعدادات
+              </button>
+            </div>
+          </form>
+        </div>
+
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= Modal: Add / Edit Product ================= -->
+  <div id="productModal"
+    class="fixed inset-0 z-50 bg-brand-deep/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div id="productModalContent"
+      class="bg-white rounded-3xl max-w-xl w-full p-6 md:p-8 shadow-2xl border border-brand-muted/20 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-4 border-b border-brand-muted/20 mb-5">
+        <h3 id="productModalTitle" class="font-display text-2xl text-brand-deep">إضافة منتج جديد</h3>
+        <button onclick="closeProductModal()"
+          class="w-8 h-8 rounded-full bg-brand-surface flex items-center justify-center text-brand-deep font-bold hover:bg-brand-light/50 transition">✕</button>
+      </div>
+
+      <form id="productForm" class="space-y-4">
+        <input type="hidden" id="prodEditId" value="">
+
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">اسم المنتج</label>
+          <input type="text" id="prodName" required placeholder="مثال: مقشر القهوة الطبيعي"
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-brand-deep mb-1">التصنيف</label>
+            <select id="prodCat"
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+              <option value="بشرة">بشرة</option>
+              <option value="شعر">شعر</option>
+              <option value="جسم">جسم</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brand-deep mb-1">السعر (ر.س)</label>
+            <input type="number" id="prodPrice" required min="1" placeholder="95"
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-brand-deep mb-1">الكمية بالمخزون</label>
+            <input type="number" id="prodStock" required min="0" placeholder="25"
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brand-deep mb-1">الحجم / السعة</label>
+            <input type="text" id="prodSize" placeholder="100 مل"
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brand-deep mb-1">الشارة الترويجية</label>
+            <input type="text" id="prodTag" placeholder="جديد / الأكثر مبيعاً"
+              class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">اختر صورة المنتج</label>
+          <div class="grid grid-cols-5 gap-2 mb-2">
+            <label class="cursor-pointer">
+              <input type="radio" name="prodImageOption" value="d.jpg" class="peer hidden" checked>
+              <img src="d.jpg"
+                class="h-14 w-full object-cover rounded-xl border-2 peer-checked:border-brand peer-checked:ring-2 peer-checked:ring-brand/30">
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="prodImageOption" value="7.jpg" class="peer hidden">
+              <img src="7.jpg"
+                class="h-14 w-full object-cover rounded-xl border-2 peer-checked:border-brand peer-checked:ring-2 peer-checked:ring-brand/30">
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="prodImageOption" value="5.jpg" class="peer hidden">
+              <img src="5.jpg"
+                class="h-14 w-full object-cover rounded-xl border-2 peer-checked:border-brand peer-checked:ring-2 peer-checked:ring-brand/30">
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="prodImageOption" value="m.jpg" class="peer hidden">
+              <img src="m.jpg"
+                class="h-14 w-full object-cover rounded-xl border-2 peer-checked:border-brand peer-checked:ring-2 peer-checked:ring-brand/30">
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="prodImageOption" value="1.jpg" class="peer hidden">
+              <img src="1.jpg"
+                class="h-14 w-full object-cover rounded-xl border-2 peer-checked:border-brand peer-checked:ring-2 peer-checked:ring-brand/30">
+            </label>
+          </div>
+          <p class="text-[10px] text-brand-muted">أو اكتب اسم أو مسار الصورة:</p>
+          <input type="text" id="prodCustomImage" placeholder="مثال: 3.jpg أو 4.jpg أو ww.jpg"
+            class="mt-1 w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2 text-xs focus:outline-none focus:border-brand">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">وصف المنتج</label>
+          <textarea id="prodDesc" rows="3" placeholder="مكونات المنتج، فوائده للبشرة أو الشعر..."
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2 text-xs focus:outline-none focus:border-brand resize-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">طريقة الاستخدام</label>
+          <textarea id="prodUsage" rows="2" placeholder="التعليمات والخطوات الموصى بها..."
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2 text-xs focus:outline-none focus:border-brand resize-none"></textarea>
+        </div>
+
+        <div class="pt-4 flex gap-3">
+          <button type="submit"
+            class="flex-1 bg-brand hover:bg-brand-dark text-white py-3 rounded-xl font-bold text-sm transition shadow-md">
+            حفظ المنتج
+          </button>
+          <button type="button" onclick="closeProductModal()"
+            class="px-5 bg-brand-surface hover:bg-brand-light/50 text-brand-deep py-3 rounded-xl font-bold text-sm transition">
+            إلغاء
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= Modal: Order Details / Invoice ================= -->
+  <div id="orderDetailModal"
+    class="fixed inset-0 z-50 bg-brand-deep/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div id="orderDetailContent"
+      class="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 shadow-2xl border border-brand-muted/20 relative transform scale-95 transition-transform duration-300">
+      <div class="flex items-center justify-between pb-4 border-b border-brand-muted/20 mb-5">
+        <div>
+          <span class="text-xs text-brand font-bold">تفاصيل الفاتورة والطلب</span>
+          <h3 id="modalOrderId" class="font-display text-2xl text-brand-deep">MC-0000</h3>
+        </div>
+        <button onclick="closeOrderDetailModal()"
+          class="w-8 h-8 rounded-full bg-brand-surface flex items-center justify-center text-brand-deep font-bold hover:bg-brand-light/50 transition">✕</button>
+      </div>
+
+      <div class="space-y-4 text-xs md:text-sm">
+        <div class="bg-brand-surface p-4 rounded-2xl space-y-2">
+          <div class="flex justify-between">
+            <span class="text-brand-muted">العميلة:</span>
+            <span id="modalOrderCustomer" class="font-bold text-brand-deep"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-brand-muted">رقم الجوال:</span>
+            <span id="modalOrderPhone" class="font-bold text-brand-deep" dir="ltr"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-brand-muted">المدينة والعنوان:</span>
+            <span id="modalOrderAddress" class="font-bold text-brand-deep"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-brand-muted">طريقة الدفع:</span>
+            <span id="modalOrderPayment" class="font-bold text-brand"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-brand-muted">تاريخ الطلب:</span>
+            <span id="modalOrderDate" class="font-bold text-brand-deep"></span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-xs text-brand-deep mb-2">العناصر المطلوبة:</h4>
+          <div id="modalOrderItems" class="space-y-2 max-h-40 overflow-y-auto">
+            <!-- items -->
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-brand-muted/20 flex justify-between items-center text-base font-bold">
+          <span class="text-brand-deep">إجمالي الفاتورة:</span>
+          <span id="modalOrderTotal" class="text-brand text-xl"></span>
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-3">
+        <button onclick="window.print()"
+          class="flex-1 bg-brand-dark hover:bg-brand-deep text-white py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9" />
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <rect x="6" y="14" width="12" height="8" />
+          </svg>
+          طباعة إشعار الشحن
+        </button>
+        <button onclick="closeOrderDetailModal()"
+          class="px-5 bg-brand-surface hover:bg-brand-light/50 text-brand-deep py-2.5 rounded-xl text-xs font-bold transition">
+          إغلاق
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= Admin Auth Gate Modal ================= -->
+  <div id="authGateModal"
+    class="fixed inset-0 z-50 bg-brand-deep/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-8 shadow-2xl border border-brand-muted/20 text-center">
+      <div
+        class="w-16 h-16 rounded-2xl bg-brand text-white mx-auto flex items-center justify-center mb-4 shadow-lg shadow-brand/30">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+      </div>
+      <h3 class="font-display text-2xl text-brand-deep mb-1">تسجيل دخول المشرف</h3>
+      <p class="text-xs text-brand-muted mb-6">يرجى تسجيل الدخول للوصول إلى لوحة التحكم</p>
+
+      <form id="adminDirectLoginForm" class="space-y-4 text-right">
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">اسم المستخدم</label>
+          <input type="text" id="directUser" required placeholder="admin"
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-brand-deep mb-1">كلمة المرور</label>
+          <input type="password" id="directPass" required placeholder="•••••"
+            class="w-full bg-brand-surface border border-brand-muted/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand">
+        </div>
+        <div id="directLoginErr"
+          class="hidden text-xs text-rose-600 bg-rose-50 border border-rose-200 p-2 rounded-xl text-center font-bold">
+          اسم المستخدم أو كلمة المرور غير صحيحة!
+        </div>
+        <button type="submit"
+          class="w-full bg-brand hover:bg-brand-dark text-white py-3 rounded-xl font-bold text-sm transition shadow-md shadow-brand/25">
+          دخول لوحة التحكم
+        </button>
+        <a href="index.html" class="block text-center text-xs text-brand-muted hover:text-brand font-bold mt-2">
+          ← العودة لمتجر عنايتي
+        </a>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="adminToast"
+    class="toast fixed bottom-6 left-1/2 -translate-x-1/2 translate-y-24 opacity-0 bg-brand-deep text-white px-6 py-3 rounded-full z-50 text-sm font-bold shadow-2xl border border-brand-accent/30 flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-brand-accent"></span>
+    <span id="adminToastMsg">تمت العملية بنجاح</span>
+  </div>
+
+  <!-- Load Shared Store Data -->
+  <script src="store.js"></script>
+
+  <!-- Admin Dashboard Logic -->
+  <script>
+    let currentTab = 'overview';
+    let currentCategoryFilter = 'all';
+    let currentOrderFilter = 'all';
+
+    function checkAuth() {
+      const isAuth = localStorage.getItem('mycare_admin_auth') === 'true';
+      const gate = document.getElementById("authGateModal");
+      if (!isAuth) {
+        gate.classList.remove("hidden");
+      } else {
+        gate.classList.add("hidden");
+      }
+    }
+
+    function logoutAdmin() {
+      localStorage.removeItem('mycare_admin_auth');
+      window.location.href = 'index.html';
+    }
+
+    // Initialize UI on load
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAuth();
+      refreshAll();
+      loadSettingsToForm();
+
+      // Listen to cross-updates from storefront
+      window.addEventListener('mycare:data_updated', (e) => {
+        refreshAll();
+      });
+
+      // Mobile sidebar toggle
+      const mobileToggle = document.getElementById("mobileSidebarToggle");
+      if (mobileToggle) {
+        mobileToggle.addEventListener("click", () => {
+          document.getElementById("sidebarNav").classList.toggle("hidden");
+        });
+      }
+
+      // Direct login inside gate
+      document.getElementById("adminDirectLoginForm")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const u = document.getElementById("directUser").value.trim();
+        const p = document.getElementById("directPass").value.trim();
+        const err = document.getElementById("directLoginErr");
+        if (u === "admin" && p === "admin") {
+          localStorage.setItem("mycare_admin_auth", "true");
+          document.getElementById("authGateModal").classList.add("hidden");
+          showToast("مرحباً بكِ في لوحة التحكم ");
+          refreshAll();
+        } else {
+          err.classList.remove("hidden");
+          err.textContent = "اسم المستخدم أو كلمة المرور غير صحيحة! (admin / admin)";
+        }
+      });
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById("adminToast");
+      document.getElementById("adminToastMsg").textContent = msg;
+      toast.classList.remove("translate-y-24", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-24", "opacity-0");
+      }, 2500);
+    }
+
+    function switchTab(tabId) {
+      currentTab = tabId;
+      document.querySelectorAll("[id^='tab-']").forEach(sec => sec.classList.add("hidden"));
+      const targetSec = document.getElementById(`tab-${tabId}`);
+      if (targetSec) targetSec.classList.remove("hidden");
+
+      document.querySelectorAll(".nav-item").forEach(btn => {
+        if (btn.dataset.tab === tabId) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+
+      const titles = {
+        overview: "نظرة عامة وإحصائيات",
+        products: "إدارة المنتجات والمخزون",
+        orders: "الطلبات والمبيعات",
+        reviews: "آراء وتقييمات العميلات",
+        settings: "إعدادات المتجر"
+      };
+      document.getElementById("pageTitle").textContent = titles[tabId] || "لوحة التحكم";
+
+      refreshAll();
+    }
+
+    function refreshAll() {
+      const stats = MyCareStore.getStats();
+      const products = MyCareStore.getProducts();
+      const orders = MyCareStore.getOrders();
+      const reviews = MyCareStore.getReviews();
+
+      // Update KPI widgets
+      document.getElementById("statTotalSales").textContent = `${stats.totalSales.toLocaleString()} ر.س`;
+      document.getElementById("statTotalOrders").textContent = stats.totalOrders;
+      document.getElementById("statCompletedOrders").textContent = `${stats.completedOrders} مكتمل`;
+      document.getElementById("statPendingOrders").textContent = `${stats.pendingOrders} قيد التنفيذ`;
+      document.getElementById("statTotalProducts").textContent = stats.totalProducts;
+      document.getElementById("statLowStock").textContent = `${stats.lowStockCount} قارب على النفاد`;
+      document.getElementById("statReviewsCount").textContent = stats.reviewsCount;
+      document.getElementById("bannerPendingOrders").textContent = stats.pendingOrders;
+
+      // Sidebar badges
+      document.getElementById("navProductsBadge").textContent = stats.totalProducts;
+      document.getElementById("navOrdersBadge").textContent = stats.totalOrders;
+      document.getElementById("navReviewsBadge").textContent = stats.reviewsCount;
+
+      renderOverviewOrders(orders);
+      renderProductsTable(products);
+      renderOrdersTable(orders);
+      renderReviewsGrid(reviews);
+    }
+
+    /* ================= Overview Recent Orders Table ================= */
+    function renderOverviewOrders(orders) {
+      const tbody = document.getElementById("overviewRecentOrdersBody");
+      const recent = orders.slice(0, 5);
+      if (recent.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-brand-muted">لا توجد طلبات حتى الآن</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = recent.map(o => `
+        <tr class="table-row-hover">
+          <td class="py-3 font-bold text-brand-deep">${o.id}</td>
+          <td class="py-3 font-medium">${o.customer}</td>
+          <td class="py-3 text-brand-muted">${o.city}</td>
+          <td class="py-3 text-brand-muted">${o.date}</td>
+          <td class="py-3 font-bold text-brand">${o.total} ر.س</td>
+          <td class="py-3">${getStatusBadgeHTML(o.status)}</td>
+          <td class="py-3 text-left">
+            <button onclick="openOrderDetailModal('${o.id}')" class="text-xs bg-brand-surface hover:bg-brand-light/60 text-brand-deep font-bold px-3 py-1.5 rounded-lg transition">
+              عرض
+            </button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function getStatusBadgeHTML(status) {
+      switch (status) {
+        case "جديد":
+          return `<span class="bg-brand-accent/20 text-brand-dark px-2.5 py-1 rounded-full text-[11px] font-bold">جديد</span>`;
+        case "قيد التجهيز":
+          return `<span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full text-[11px] font-bold">قيد التجهيز</span>`;
+        case "تم الشحن":
+          return `<span class="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full text-[11px] font-bold">تم الشحن</span>`;
+        case "مكتمل":
+          return `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-[11px] font-bold">مكتمل</span>`;
+        case "ملغي":
+          return `<span class="bg-rose-100 text-rose-800 px-2.5 py-1 rounded-full text-[11px] font-bold">ملغي</span>`;
+        default:
+          return `<span class="bg-gray-100 text-gray-800 px-2.5 py-1 rounded-full text-[11px] font-bold">${status}</span>`;
+      }
+    }
+
+    /* ================= Products Management ================= */
+    function renderProductsTable(products) {
+      const tbody = document.getElementById("productsTableBody");
+      const noFound = document.getElementById("noProductsFound");
+
+      let filtered = products;
+      if (currentCategoryFilter !== 'all') {
+        filtered = filtered.filter(p => p.cat === currentCategoryFilter);
+      }
+
+      const searchVal = (document.getElementById("productSearchInput")?.value || "").toLowerCase().trim();
+      if (searchVal) {
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(searchVal) || (p.size && p.size.toLowerCase().includes(searchVal)));
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = "";
+        noFound.classList.remove("hidden");
+        return;
+      }
+      noFound.classList.add("hidden");
+
+      tbody.innerHTML = filtered.map(p => {
+        const stockAlert = (p.stock || 0) < 15
+          ? `<span class="text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-md text-xs">${p.stock || 0} (منخفض)</span>`
+          : `<span class="text-brand font-bold">${p.stock || 0} قطعة</span>`;
+
+        return `
+          <tr class="table-row-hover">
+            <td class="py-3 px-6">
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl overflow-hidden bg-brand-surface border border-brand-muted/20 flex-shrink-0">
+                  <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <h4 class="font-bold text-brand-deep text-sm leading-snug">${p.name}</h4>
+                  <p class="text-[11px] text-brand-muted truncate max-w-[200px]">${p.desc || ''}</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 px-4">
+              <span class="bg-brand-surface text-brand-dark px-2.5 py-1 rounded-lg text-xs font-bold border border-brand-muted/20">${p.cat}</span>
+            </td>
+            <td class="py-3 px-4 font-bold text-brand-deep text-sm">${p.price} ر.س</td>
+            <td class="py-3 px-4">${stockAlert}</td>
+            <td class="py-3 px-4">
+              ${p.tag ? `<span class="bg-brand-accent/20 text-brand-deep text-[11px] font-bold px-2.5 py-0.5 rounded-full">${p.tag}</span>` : '<span class="text-brand-muted text-xs">—</span>'}
+            </td>
+            <td class="py-3 px-4 text-xs text-brand-muted font-medium">${p.size || '—'}</td>
+            <td class="py-3 px-6 text-left">
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="editProduct(${p.id})" title="تعديل المنتج" class="p-2 rounded-lg bg-brand-surface hover:bg-brand-light text-brand-deep transition">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+                <button onclick="deleteProductPrompt(${p.id}, '${p.name}')" title="حذف المنتج" class="p-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 transition">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function filterProductsTable(category) {
+      currentCategoryFilter = category;
+      document.querySelectorAll(".prod-filter-btn").forEach(btn => {
+        if (btn.textContent.trim() === (category === 'all' ? 'الكل' : category)) {
+          btn.classList.add("bg-brand", "text-white");
+          btn.classList.remove("bg-brand-surface", "text-brand-deep");
+        } else {
+          btn.classList.remove("bg-brand", "text-white");
+          btn.classList.add("bg-brand-surface", "text-brand-deep");
+        }
+      });
+      renderProductsTable(MyCareStore.getProducts());
+    }
+
+    function searchProductsTable(val) {
+      renderProductsTable(MyCareStore.getProducts());
+    }
+
+    /* Product Modal Controls */
+    const productModal = document.getElementById("productModal");
+    const productModalContent = document.getElementById("productModalContent");
+
+    function openProductModal(productId = null) {
+      document.getElementById("productForm").reset();
+      document.getElementById("prodEditId").value = "";
+
+      if (productId) {
+        const prod = MyCareStore.getProductById(productId);
+        if (prod) {
+          document.getElementById("productModalTitle").textContent = "تعديل المنتج";
+          document.getElementById("prodEditId").value = prod.id;
+          document.getElementById("prodName").value = prod.name;
+          document.getElementById("prodCat").value = prod.cat;
+          document.getElementById("prodPrice").value = prod.price;
+          document.getElementById("prodStock").value = prod.stock || 20;
+          document.getElementById("prodSize").value = prod.size || "";
+          document.getElementById("prodTag").value = prod.tag || "";
+          document.getElementById("prodDesc").value = prod.desc || "";
+          document.getElementById("prodUsage").value = prod.usage || "";
+          document.getElementById("prodCustomImage").value = prod.image || "";
+
+          // Check radio if match
+          const radios = document.querySelectorAll("input[name='prodImageOption']");
+          radios.forEach(r => {
+            if (r.value === prod.image) r.checked = true;
+          });
+        }
+      } else {
+        document.getElementById("productModalTitle").textContent = "إضافة منتج جديد";
+      }
+
+      productModal.classList.remove("hidden");
+      setTimeout(() => {
+        productModal.classList.remove("opacity-0");
+        productModalContent.classList.remove("scale-95");
+        productModalContent.classList.add("scale-100");
+      }, 10);
+    }
+
+    function closeProductModal() {
+      productModal.classList.add("opacity-0");
+      productModalContent.classList.remove("scale-100");
+      productModalContent.classList.add("scale-95");
+      setTimeout(() => productModal.classList.add("hidden"), 300);
+    }
+
+    function editProduct(id) {
+      openProductModal(id);
+    }
+
+    function deleteProductPrompt(id, name) {
+      if (confirm(`هل أنتِ متأكدة من رغبتكِ في حذف المنتج "${name}"؟`)) {
+        MyCareStore.deleteProduct(id);
+        refreshAll();
+        showToast("تم حذف المنتج بنجاح");
+      }
+    }
+
+    document.getElementById("productForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const editId = document.getElementById("prodEditId").value;
+      const name = document.getElementById("prodName").value.trim();
+      const cat = document.getElementById("prodCat").value;
+      const price = Number(document.getElementById("prodPrice").value);
+      const stock = Number(document.getElementById("prodStock").value);
+      const size = document.getElementById("prodSize").value.trim();
+      const tag = document.getElementById("prodTag").value.trim();
+      const desc = document.getElementById("prodDesc").value.trim();
+      const usage = document.getElementById("prodUsage").value.trim();
+
+      const customImg = document.getElementById("prodCustomImage").value.trim();
+      const selectedRadio = document.querySelector("input[name='prodImageOption']:checked");
+      const image = customImg || (selectedRadio ? selectedRadio.value : "d.jpg");
+
+      const productPayload = { name, cat, price, stock, size, tag, desc, usage, image };
+
+      if (editId) {
+        MyCareStore.updateProduct(editId, productPayload);
+        showToast("تم تحديث بيانات المنتج بنجاح 🌿");
+      } else {
+        MyCareStore.addProduct(productPayload);
+        showToast("تمت إضافة المنتج الجديد بنجاح 🌿");
+      }
+
+      closeProductModal();
+      refreshAll();
+    });
+
+    /* ================= Orders Management ================= */
+    function renderOrdersTable(orders) {
+      const tbody = document.getElementById("ordersTableBody");
+      const noFound = document.getElementById("noOrdersFound");
+
+      let filtered = orders;
+      if (currentOrderFilter !== 'all') {
+        filtered = filtered.filter(o => o.status === currentOrderFilter);
+      }
+
+      const searchVal = (document.getElementById("orderSearchInput")?.value || "").toLowerCase().trim();
+      if (searchVal) {
+        filtered = filtered.filter(o => o.id.toLowerCase().includes(searchVal) || o.customer.toLowerCase().includes(searchVal) || (o.phone && o.phone.includes(searchVal)));
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = "";
+        noFound.classList.remove("hidden");
+        return;
+      }
+      noFound.classList.add("hidden");
+
+      tbody.innerHTML = filtered.map(o => {
+        const itemsSummary = o.items.map(it => `${it.name} (×${it.qty || 1})`).join("<br>");
+
+        return `
+          <tr class="table-row-hover">
+            <td class="py-3 px-6 font-bold text-brand-deep">${o.id}</td>
+            <td class="py-3 px-4">
+              <p class="font-bold text-brand-deep">${o.customer}</p>
+              <p class="text-xs text-brand-muted" dir="ltr">${o.phone}</p>
+            </td>
+            <td class="py-3 px-4">
+              <p class="font-medium text-brand-deep">${o.city}</p>
+              <p class="text-[11px] text-brand-muted truncate max-w-[150px]">${o.address}</p>
+            </td>
+            <td class="py-3 px-4 text-xs text-brand-muted">${o.date}</td>
+            <td class="py-3 px-4 text-xs text-brand-dark leading-relaxed">${itemsSummary}</td>
+            <td class="py-3 px-4">
+              <p class="font-bold text-brand text-sm">${o.total} ر.س</p>
+              <p class="text-[10px] text-brand-muted">${o.paymentMethod || 'الدفع عند الاستلام'}</p>
+            </td>
+            <td class="py-3 px-4">
+              <select onchange="updateOrderStatusLive('${o.id}', this.value)" class="text-xs font-bold rounded-lg px-2.5 py-1 border border-brand-muted/30 focus:outline-none focus:border-brand bg-white text-brand-deep cursor-pointer">
+                <option value="جديد" ${o.status === "جديد" ? "selected" : ""}>جديد</option>
+                <option value="قيد التجهيز" ${o.status === "قيد التجهيز" ? "selected" : ""}>قيد التجهيز</option>
+                <option value="تم الشحن" ${o.status === "تم الشحن" ? "selected" : ""}>تم الشحن</option>
+                <option value="مكتمل" ${o.status === "مكتمل" ? "selected" : ""}>مكتمل</option>
+                <option value="ملغي" ${o.status === "ملغي" ? "selected" : ""}>ملغي</option>
+              </select>
+            </td>
+            <td class="py-3 px-6 text-left">
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="openOrderDetailModal('${o.id}')" title="عرض الفاتورة" class="p-2 rounded-lg bg-brand-surface hover:bg-brand-light text-brand-deep transition">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </button>
+                <button onclick="deleteOrderPrompt('${o.id}')" title="حذف الطلب" class="p-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 transition">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function filterOrdersTable(status) {
+      currentOrderFilter = status;
+      document.querySelectorAll(".order-filter-btn").forEach(btn => {
+        if (btn.textContent.trim().includes(status === 'all' ? 'الكل' : status)) {
+          btn.classList.add("bg-brand", "text-white");
+          btn.classList.remove("bg-brand-surface", "text-brand-deep");
+        } else {
+          btn.classList.remove("bg-brand", "text-white");
+          btn.classList.add("bg-brand-surface", "text-brand-deep");
+        }
+      });
+      renderOrdersTable(MyCareStore.getOrders());
+    }
+
+    function searchOrdersTable(val) {
+      renderOrdersTable(MyCareStore.getOrders());
+    }
+
+    function updateOrderStatusLive(orderId, newStatus) {
+      MyCareStore.updateOrderStatus(orderId, newStatus);
+      showToast(`تم تحديث حالة الطلب إلى "${newStatus}"`);
+      refreshAll();
+    }
+
+    function deleteOrderPrompt(orderId) {
+      if (confirm(`هل أنتِ متأكدة من حذف الطلب ${orderId}؟`)) {
+        MyCareStore.deleteOrder(orderId);
+        showToast("تم حذف الطلب بنجاح");
+        refreshAll();
+      }
+    }
+
+    /* Order Details Modal Controls */
+    const orderModal = document.getElementById("orderDetailModal");
+    const orderModalContent = document.getElementById("orderDetailContent");
+
+    function openOrderDetailModal(orderId) {
+      const orders = MyCareStore.getOrders();
+      const order = orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      document.getElementById("modalOrderId").textContent = order.id;
+      document.getElementById("modalOrderCustomer").textContent = order.customer;
+      document.getElementById("modalOrderPhone").textContent = order.phone;
+      document.getElementById("modalOrderAddress").textContent = `${order.city} — ${order.address}`;
+      document.getElementById("modalOrderPayment").textContent = order.paymentMethod || 'الدفع عند الاستلام';
+      document.getElementById("modalOrderDate").textContent = order.date;
+      document.getElementById("modalOrderTotal").textContent = `${order.total} ر.س`;
+
+      const itemsContainer = document.getElementById("modalOrderItems");
+      itemsContainer.innerHTML = order.items.map(it => `
+        <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-brand-muted/20">
+          <div>
+            <p class="font-bold text-brand-deep">${it.name}</p>
+            <p class="text-[11px] text-brand-muted">${it.price} ر.س × ${it.qty || 1}</p>
+          </div>
+          <span class="font-bold text-brand">${(it.price * (it.qty || 1))} ر.س</span>
+        </div>
+      `).join("");
+
+      orderModal.classList.remove("hidden");
+      setTimeout(() => {
+        orderModal.classList.remove("opacity-0");
+        orderModalContent.classList.remove("scale-95");
+        orderModalContent.classList.add("scale-100");
+      }, 10);
+    }
+
+    function closeOrderDetailModal() {
+      orderModal.classList.add("opacity-0");
+      orderModalContent.classList.remove("scale-100");
+      orderModalContent.classList.add("scale-95");
+      setTimeout(() => orderModal.classList.add("hidden"), 300);
+    }
+
+    /* ================= Reviews Management ================= */
+    function renderReviewsGrid(reviews) {
+      const container = document.getElementById("reviewsContainer");
+      if (!container) return;
+
+      if (reviews.length === 0) {
+        container.innerHTML = `<p class="col-span-full text-center py-10 text-brand-muted">لا توجد مراجعات حالياً</p>`;
+        return;
+      }
+
+      container.innerHTML = reviews.map(r => `
+        <div class="bg-white rounded-3xl p-6 border border-brand-muted/20 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-brand font-bold tracking-widest">${r.rating || '★★★★★'}</span>
+              <span class="text-[11px] text-brand-muted">${r.date || 'مؤخراً'}</span>
+            </div>
+            <p class="text-xs md:text-sm text-brand-deep/80 leading-relaxed mb-4">"${r.text}"</p>
+          </div>
+          <div class="pt-4 border-t border-brand-muted/15 flex items-center justify-between">
+            <span class="font-bold text-xs text-brand-deep">— ${r.name}</span>
+            <button onclick="deleteReviewPrompt(${r.id})" class="text-xs text-rose-500 hover:text-rose-700 font-bold p-1 rounded transition">
+              حذف التقييم
+            </button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function deleteReviewPrompt(id) {
+      if (confirm("هل ترغبين بحذف هذا التقييم؟")) {
+        MyCareStore.deleteReview(id);
+        showToast("تم حذف التقييم");
+        refreshAll();
+      }
+    }
+
+    /* ================= Settings Form ================= */
+    function loadSettingsToForm() {
+      const s = MyCareStore.getSettings();
+      if (document.getElementById("settingStoreName")) document.getElementById("settingStoreName").value = s.storeName || "عنايتي";
+      if (document.getElementById("settingTagline")) document.getElementById("settingTagline").value = s.tagline || "عناية طبيعية لبشرتك";
+      if (document.getElementById("settingContactEmail")) document.getElementById("settingContactEmail").value = s.contactEmail || "hello@anayati.example";
+      if (document.getElementById("settingContactPhone")) document.getElementById("settingContactPhone").value = s.contactPhone || "0550001122";
+      if (document.getElementById("settingCurrency")) document.getElementById("settingCurrency").value = s.currency || "ر.س";
+      if (document.getElementById("settingFreeShipping")) document.getElementById("settingFreeShipping").value = s.freeShippingThreshold || 200;
+    }
+
+    document.getElementById("settingsForm")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const updated = {
+        storeName: document.getElementById("settingStoreName").value,
+        tagline: document.getElementById("settingTagline").value,
+        contactEmail: document.getElementById("settingContactEmail").value,
+        contactPhone: document.getElementById("settingContactPhone").value,
+        currency: document.getElementById("settingCurrency").value,
+        freeShippingThreshold: Number(document.getElementById("settingFreeShipping").value)
+      };
+      MyCareStore.saveSettings(updated);
+      showToast("تم حفظ الإعدادات بنجاح 🌿");
+    });
+
+    function confirmResetData() {
+      if (confirm("هل ترغبين في استعادة البيانات التجريبية الافتراضية كاملة؟ سيتم تحديث المنتجات والطلبات.")) {
+        MyCareStore.resetAll();
+        showToast("تمت استعادة البيانات الافتراضية 🌿");
+        refreshAll();
+        loadSettingsToForm();
+      }
+    }
+  </script>
+</body>
+
+</html>
